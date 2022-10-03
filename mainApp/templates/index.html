@@ -13,5 +13,9 @@
     {% endif %}
     <div style="margin-left:20px; margin-top:15px">
         <h1>Welcome back!</h1>
+        <form method="POST" action=".">
+            {% csrf_token %}
+            <button type="submit" name="logout" value="logout">Logout</button>
+        </form>
     </div>
 {% endblock %}
