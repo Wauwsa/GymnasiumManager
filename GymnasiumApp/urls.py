@@ -24,6 +24,6 @@ urlpatterns = [
     path('', include('mainApp.urls')),
     path(
         "favicon.ico",
-        RedirectView.as_view(url=staticfiles_storage.url("favicon.ico")),
+        RedirectView.as_view(url=staticfiles_storage.url("favicon.ico")),  # browser searches at site.com/favicon for favicon, redirect to site.com/static/favicon
     ),
 ]

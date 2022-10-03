@@ -10,12 +10,10 @@ def main_page(request):
         if request.session['success']:  # if variable is True, that means user just logged in
             messages.success(request, "You've successfully been logged in!")  # success message
             request.session['success'] = False  # set value to False again
-
         if request.method == "POST":
             if request.POST['logout'] == 'logout':  # check if post is for logout
-                logout(request)
+                logout(request)  # logout the user
                 return redirect('loginForm:login')
-
         else:
             return render(request, 'index.html', {})
 
