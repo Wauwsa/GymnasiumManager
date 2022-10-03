@@ -20,7 +20,7 @@ def login_user(request):
             messages.success(request, "The credentials are either wrong or that account does not exist.")
             return redirect('login')
     else:
-        return render(request, 'registration/login.html', {})
+        return render(request, 'login.html', {})
 
 
 def logged_in(request):
