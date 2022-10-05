@@ -1,22 +1,47 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-    {% if messages %}
-        {% for message in messages %}
-           <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
-               <i class="bi bi-exclamation-triangle-fill"></i> {{ message }}
-               <button type="button" class="close" aria-label="Close" data-bs-dismiss="alert">
-                   <span aria-hidden="true">&times;</span>
-               </button>
-           </div>
-        {% endfor %}
-    {% endif %}
-    <div style="margin-left:20px; margin-top:15px">
-        <h1>Welcome back {{ user.first_name }}!</h1>
-        <p>You are logged in as {{ user.username }}!</p>
-        <form method="POST" action=".">
-            {% csrf_token %}
-            <button type="submit" name="logout" value="logout">Logout</button>
-        </form>
-    </div>
+    <header>
+        <img class="logo" src="/static/images/logo.png" alt="logo">
+        <nav>
+            <ul class="nav__links">
+                <li><a href=''>Home</a></li>
+                <li><a href='noten'>Noten</a></li>
+                <li><a href='absenzen'>Absenzen</a></li>
+            </ul>
+        </nav>
+        <a class="cta">
+            <form method="POST" action=".">
+                {% csrf_token %}
+                <button type="submit" name="logout" value="logout" class="nav-button">Logout</button>
+            </form>
+        </a>
+    </header>
+    <main>
+        <div>
+            {% if messages %}
+                {% for message in messages %}
+                   <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
+                       <i class="bi bi-exclamation-triangle-fill"></i> {{ message }}
+                       <button type="button" class="close" aria-label="Close" data-bs-dismiss="alert">
+                           <span aria-hidden="true">&times;</span>
+                       </button>
+                   </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mauris sit amet massa vitae tortor condimentum. Sem nulla pharetra diam sit amet nisl. Nulla facilisi etiam dignissim diam quis enim lobortis. Nec feugiat in fermentum posuere urna nec tincidunt praesent semper. Iaculis eu non diam phasellus vestibulum lorem sed risus. Et molestie ac feugiat sed lectus vestibulum mattis. Semper feugiat nibh sed pulvinar proin gravida hendrerit lectus. Ut consequat semper viverra nam libero justo laoreet sit. Posuere urna nec tincidunt praesent semper. Hac habitasse platea dictumst quisque. Condimentum mattis pellentesque id nibh tortor id aliquet. Porttitor lacus luctus accumsan tortor posuere ac ut. Pharetra diam sit amet nisl suscipit adipiscing bibendum est ultricies. Purus sit amet volutpat consequat mauris. Facilisi nullam vehicula ipsum a.
+
+Cras pulvinar mattis nunc sed blandit. Viverra suspendisse potenti nullam ac tortor vitae. Porttitor leo a diam sollicitudin tempor. Ac placerat vestibulum lectus mauris ultrices. Lorem ipsum dolor sit amet. Eget dolor morbi non arcu risus quis varius quam quisque. Pellentesque adipiscing commodo elit at imperdiet dui. Praesent elementum facilisis leo vel fringilla est ullamcorper. Mauris vitae ultricies leo integer malesuada nunc vel risus. Aliquet nibh praesent tristique magna sit amet purus gravida. Sagittis id consectetur purus ut faucibus pulvinar elementum integer enim. Feugiat scelerisque varius morbi enim nunc faucibus a. Netus et malesuada fames ac turpis egestas maecenas pharetra convallis. Pulvinar neque laoreet suspendisse interdum consectetur libero id. Eros donec ac odio tempor orci dapibus.
+
+Aliquet nec ullamcorper sit amet risus nullam. Magna etiam tempor orci eu lobortis. Neque volutpat ac tincidunt vitae semper quis lectus nulla at. Convallis aenean et tortor at risus viverra. Donec massa sapien faucibus et molestie ac. Purus faucibus ornare suspendisse sed nisi. Eget egestas purus viverra accumsan in nisl. In hac habitasse platea dictumst vestibulum rhoncus est. A pellentesque sit amet porttitor eget dolor morbi non. Congue nisi vitae suscipit tellus mauris a. Bibendum ut tristique et egestas quis ipsum.
+
+Elementum eu facilisis sed odio. Quisque id diam vel quam elementum pulvinar etiam non. Aliquam nulla facilisi cras fermentum odio eu. Suspendisse interdum consectetur libero id faucibus nisl. Pharetra pharetra massa massa ultricies mi quis hendrerit dolor. Lectus magna fringilla urna porttitor rhoncus dolor purus. Mi quis hendrerit dolor magna. Varius quam quisque id diam vel quam elementum pulvinar. Turpis cursus in hac habitasse platea dictumst quisque sagittis purus. Et ultrices neque ornare aenean euismod. Donec enim diam vulputate ut pharetra sit amet. Nec feugiat in fermentum posuere urna nec. Vitae justo eget magna fermentum. Tempor id eu nisl nunc mi ipsum faucibus vitae. Placerat vestibulum lectus mauris ultrices eros in cursus turpis massa. Ultrices vitae auctor eu augue ut.
+
+Quam quisque id diam vel quam elementum pulvinar etiam. Ut etiam sit amet nisl purus in mollis. Diam sollicitudin tempor id eu nisl nunc mi ipsum. Dignissim diam quis enim lobortis scelerisque. Arcu dui vivamus arcu felis bibendum ut tristique et. Blandit volutpat maecenas volutpat blandit. Ultricies lacus sed turpis tincidunt id aliquet risus. Fringilla est ullamcorper eget nulla facilisi etiam dignissim diam. Viverra justo nec ultrices dui. Eu augue ut lectus arcu bibendum at. Ultrices tincidunt arcu non sodales neque sodales ut etiam sit. Eros in cursus turpis massa tincidunt dui ut ornare.
+            </p>
+        </div>
+    </main>
 {% endblock %}

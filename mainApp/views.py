@@ -24,3 +24,11 @@ def main_page(request):
 
     else:  # else redirect to login page
         return redirect('loginForm:login')
+
+
+def noten(request):
+    return render(request, 'noten.html')
+
+
+def absenzen(request):
+    return render(request, 'absenzen.html')
