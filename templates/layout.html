@@ -13,6 +13,22 @@
         <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     </head>
     <body>
+        <header>
+            <a href="/"><img class="logo" src="/static/images/logo.png" alt="logo"></a>
+            <nav>
+                <ul class="nav__links">
+                    <li><a href='/'>Home</a></li>
+                    <li><a href='noten'>Noten</a></li>
+                    <li><a href='absenzen'>Absenzen</a></li>
+                </ul>
+            </nav>
+            <a class="cta">
+                <form method="POST" action=".">
+                    {% csrf_token %}
+                    <button type="submit" name="logout" value="logout" class="nav-button">Logout</button>
+                </form>
+            </a>
+        </header>
         {% block body %}
 
         {% endblock %}

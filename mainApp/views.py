@@ -3,20 +3,14 @@ from django.contrib import messages
 from django.contrib.auth import logout
 
 # Create your views here.
+# POST Logout muss nur in der View für Index getestet werden, da in HTML action="." --> Post wird zu root weitergeleitet
 
 
 def main_page(request):
     if request.user.is_authenticated:  # if user is logged in
-        try:
-            request.session['success']
-        except KeyError:
-            request.session['success'] = False
-        if request.session['success']:  # if variable is True, that means user just logged in
-            messages.success(request, "You've successfully been logged in!")  # success message
-            request.session['success'] = False  # set value to False again
-
         if request.method == "POST":
             if request.POST['logout'] == 'logout':  # check if post is for logout
+                print("About to logout")
                 logout(request)  # logout the user
                 return redirect('loginForm:login')
         else:
@@ -27,8 +21,14 @@ def main_page(request):
 
 
 def noten(request):
-    return render(request, 'noten.html')
+    if request.user.is_authenticated:  # if user is logged in
+        return render(request, 'noten.html')
+    else:  # else redirect to login page
+        return redirect('loginForm:login')
 
 
 def absenzen(request):
-    return render(request, 'absenzen.html')
+    if request.user.is_authenticated:  # if user is logged in
+        return render(request, 'absenzen.html')
+    else:  # else redirect to login page
+        return redirect('loginForm:login')

@@ -1,13 +1,13 @@
-let state = false;
+let password_show = false;
 function show_password() {
-    if(state){
+    if(password_show){
         document.getElementById("password").setAttribute("type", "password");
         document.getElementById("eye").setAttribute("class", "bi bi-eye");
-        state = false
+        password_show = false
     }
     else {
         document.getElementById("password").setAttribute("type", "text");
         document.getElementById("eye").setAttribute("class", "bi bi-eye-slash");
-        state = true
+        password_show = true
     }
 }

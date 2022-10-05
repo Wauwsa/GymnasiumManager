@@ -28,6 +28,12 @@ main {
     background-color: var(--main-bg-color);
 }
 
+/* Login Form */
+.logo-login {
+    align-content: center;
+}
+
+/* Navigation Bar */
 .logo {
     cursor: pointer;
     height: 64px;
@@ -64,3 +70,5 @@ main {
 .nav-button:hover {
     background-color: rgba(0,136,169,0.8);
 }
+
+/* Index File */
