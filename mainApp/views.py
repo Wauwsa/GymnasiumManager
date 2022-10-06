@@ -10,7 +10,6 @@ def main_page(request):
     if request.user.is_authenticated:  # if user is logged in
         if request.method == "POST":
             if request.POST['logout'] == 'logout':  # check if post is for logout
-                print("About to logout")
                 logout(request)  # logout the user
                 return redirect('loginForm:login')
         else:

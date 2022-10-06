@@ -8,10 +8,17 @@
     padding: 0;
 }
 
-li, a, button, p {
+li, a, button {
     font-family: "Montserrat", sans-serif;
     font-weight: 500;
     font-size: 16px;
+    color: #edf0f1;
+    text-decoration: none;
+}
+
+h1, h2 {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
     color: #edf0f1;
     text-decoration: none;
 }
@@ -26,6 +33,8 @@ header {
 
 main {
     background-color: var(--main-bg-color);
+    min-width: 100%;
+    min-height: 100%;
 }
 
 /* Login Form */
@@ -72,3 +81,9 @@ main {
 }
 
 /* Index File */
+.personal-info {
+    padding-top: 50px;
+    padding-bottom: 10px;
+    margin-left: 200px;
+    color: #edf0f1;
+}
