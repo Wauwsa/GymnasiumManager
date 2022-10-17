@@ -40,6 +40,8 @@ main {
 /* Login Form */
 .logo-login {
     align-content: center;
+    height: 40%;
+    width: 40%;
 }
 
 /* Navigation Bar */
