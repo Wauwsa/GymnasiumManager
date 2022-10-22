@@ -3,6 +3,8 @@ from .models import Test, Subject, Student
 from django.contrib.auth.admin import UserAdmin
 
 # Register your models here.
+
+
 class CustomStudentAdmin(UserAdmin):
     list_display = (
         'username', 'email', 'first_name', 'last_name', 'is_staff',
@@ -50,8 +52,6 @@ class CustomStudentAdmin(UserAdmin):
             'fields': ('birth', 'street', 'street_number', 'city', 'province', 'code')
         })
     )
-
-
 
 
 admin.site.register(Test)
