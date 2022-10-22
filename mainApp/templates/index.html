@@ -6,13 +6,15 @@
             <h2>
                 <u>Persönliche Informationen:</u>
             </h2>
-            <h5>
-                <strong><u>Name:</u></strong> {{ user.first_name }} {{ user.last_name }}
+            <p>
+                Ganzer Name: {{ user.first_name }} {{ user.last_name }}
                 <br>
-                <strong><u>E-Mail:</u></strong> {{ user.email }}
+                E-Mail: {{ user.email }}
                 <br>
-                <strong><u>Username:</u></strong> {{ user.username }}
-            </h5>
+                Username: {{ user.username }}
+                <br>
+                Adresse: {{ user.student.return_address }}
+            </p>
         </div>
     </main>
 {% endblock %}

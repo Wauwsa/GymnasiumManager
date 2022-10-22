@@ -5,6 +5,17 @@
         <div class="personal-info">
             <h1>
                 <u>Noten:</u>
+                {% if subject_list %}
+                     <ul style="list-style-type: None">
+                        {% for subject in subject_list %}
+                            <li style="margin-top: 5px;">
+                                Fach: {{ subject }}
+                            </li>
+                        {% endfor %}
+                     </ul>
+                    {% else %}
+                        <p>Keine Fächer!</p>
+                {% endif %}
             </h1>
         </div>
     </main>
