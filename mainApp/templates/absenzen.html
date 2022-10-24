@@ -1,5 +1,66 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-    This is absenzen
+
+    <main>
+        <div class="personal-info">
+            <h1>
+                <u>Absenzen:</u>
+            </h1>
+            {% if absenzen %}
+                {% for subject, absenzen in absenzen.items  %}
+                    <button class="collapsible" type="button">{{ subject }}</button>
+                    <div class="content">
+                        {% if absenzen %}
+                            <ul>
+                                {% for absenzen_list in absenzen %}
+                                    <div class="content-text">
+                                        <li>Entschuldigt: {{ absenzen_list.0 }}</li>
+                                        {% if not absenzen_list.1 %}
+                                            <p>--> Abgabadatum: {{ absenzen_list.1 }}</p>
+                                        {% else %}
+                                            <p>Schon abgegeben :)</p>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <div class="content-text">
+                                <p>Du hast noch keine Absenzen in diesem Fach!</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                {% else %}
+                <p>Noch keine Fächer eingetragen!</p>
+            {% endif %}
+            <script>
+                const coll = document.getElementsByClassName("collapsible");
+                let i
+
+                for (i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function () {
+                        this.classList.toggle("active");
+                        console.log(this.classList);
+                        const content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            </script>
+        </div>
+    </main>
 {% endblock %}
+
+
+
+
+
+
+
+
+
+

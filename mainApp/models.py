@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import AbstractUser
 import datetime
+from django.utils.timezone import timedelta
 # Create your models here.
 
 
@@ -58,3 +59,36 @@ class Test(models.Model):
             for grade in grades_object_list:
                 grades_list.append(grade.grade)
             return grades_list
+
+
+class Absenzen(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, blank=True, null=True)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, blank=True, null=True)
+    date = models.DateField(default=datetime.date.today)
+    excused = models.BooleanField(default=False, blank=True, null=True)
+
+    def __str__(self):
+        local_excuse = 'Nein'
+        if self.excused:
+            local_excuse = 'Ja'
+        return f'Fach: {self.subject.name}, Entschuldigt: {local_excuse}'
+
+    def return_expire_date(self):
+        expire_date = self.date + datetime.timedelta(days=10)
+        return expire_date
+
+    def get_absenzen(self, student, subjects):
+        absenzen_dict = {}
+        for subject in subjects:
+            absenzen_list_complete = []
+            absenzen_object_list = Absenzen.objects.filter(student=student, subject__name=subject)
+            for absenz in absenzen_object_list:
+                absenzen_list = []
+                expire_date = str(absenz.date + datetime.timedelta(days=10))
+                absenzen_list.append(absenz.excused)
+                absenzen_list.append(expire_date)
+                absenzen_list_complete.append(absenzen_list)
+            print(absenzen_list_complete)
+            absenzen_dict[subject] = absenzen_list_complete
+        print(absenzen_dict)
+        return absenzen_dict
