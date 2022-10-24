@@ -82,6 +82,11 @@ main {
     background-color: rgba(0,136,169,0.8);
 }
 
+/* Disables ugly Outline by Bootstrap */
+button:focus {
+    outline:none;
+}
+
 /* Index File */
 .personal-info {
     padding-top: 50px;

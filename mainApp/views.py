@@ -39,7 +39,7 @@ def absenzen(request):
         for subject in object_list:
             subject_list.append(subject.name)
         absenzen = Absenzen.get_absenzen(student=request.user.id, subjects=subject_list)
-        current_date = datetime.date.today
+        current_date = datetime.date.today().strftime('%d/%m/%Y')
         return render(request, 'absenzen.html', {'absenzen': absenzen, 'current_date': current_date})
     else:  # else redirect to login page
         return redirect('loginForm:login')
