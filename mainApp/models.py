@@ -19,16 +19,11 @@ class Student(AbstractUser):
         else:
             return 'N/A'
 
+    def get_age(self):
+        return f'{int((datetime.date.today() - self.birth).days / 365.25)} Jahre'
+
     def __str__(self):
         return f'{self.first_name + " " + self.last_name}'
-
-
-class Test(models.Model):
-    grade = models.SmallIntegerField(validators=[MinValueValidator(0), MaxValueValidator(6)])
-    date = models.DateField(default=datetime.date.today)
-
-    def __str__(self):
-        return f'Note: {self.grade}'
 
 
 class Subject(models.Model):
@@ -36,3 +31,30 @@ class Subject(models.Model):
 
     def __str__(self):
         return f'{self.name}'
+
+
+class Test(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, blank=True, null=True)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, blank=True, null=True)
+    grade = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(6)], blank=True, null=True)
+    date = models.DateField(default=datetime.date.today)
+
+    def __str__(self):
+        return f'Note: {self.grade}'
+
+    def get_grades(self, student, subjects):
+        grades_dict = {}
+        if type(subjects) == list:
+            for subject in subjects:
+                grades_list = []
+                grades_object_list = Test.objects.filter(student=student, subject__name=subject)
+                for grade in grades_object_list:
+                    grades_list.append(grade.grade)
+                grades_dict[subject] = grades_list
+            return grades_dict
+        else:
+            grades_list = []
+            grades_object_list = Test.objects.filter(student=student, subject__name=subjects)
+            for grade in grades_object_list:
+                grades_list.append(grade.grade)
+            return grades_list

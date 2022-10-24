@@ -5,18 +5,42 @@
         <div class="personal-info">
             <h1>
                 <u>Noten:</u>
-                {% if subject_list %}
-                     <ul style="list-style-type: None">
-                        {% for subject in subject_list %}
-                            <li style="margin-top: 5px;">
-                                Fach: {{ subject }}
-                            </li>
-                        {% endfor %}
-                     </ul>
-                    {% else %}
-                        <p>Keine Fächer!</p>
-                {% endif %}
             </h1>
+            {% for subject, grades in grades.items %}
+                <button class="collapsible" type="button">{{ subject }}</button>
+                <div class="content">
+                    {% if grades %}
+                        <ul>
+                            {% for grade in grades %}
+                                <div class="content-text">
+                                    <li>{{ grade }}</li>
+                                </div>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <div class="content-text">
+                            <p>Du hast noch keine Noten in diesem Fach!</p>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <script>
+                const coll = document.getElementsByClassName("collapsible");
+                let i
+
+                for (i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function () {
+                        this.classList.toggle("active");
+                        console.log(this.classList);
+                        const content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            </script>
         </div>
     </main>
 {% endblock %}

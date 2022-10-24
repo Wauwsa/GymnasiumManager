@@ -7,13 +7,13 @@
                 <u>Persönliche Informationen:</u>
             </h2>
             <p>
-                Ganzer Name: {{ user.first_name }} {{ user.last_name }}
+                Name: {{ user.first_name }} {{ user.last_name }}
                 <br>
                 E-Mail: {{ user.email }}
                 <br>
-                Username: {{ user.username }}
-                <br>
                 Adresse: {{ user.return_address }}
+                <br>
+                Alter: {{ user.get_age }}
             </p>
         </div>
     </main>
