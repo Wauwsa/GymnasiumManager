@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from .models import Test, Subject, Absenzen
+import datetime
 
 # Create your views here.
 # POST Logout muss nur in der View für Index getestet werden, da in HTML action="." --> Post wird zu root weitergeleitet
@@ -25,7 +26,7 @@ def noten(request):
         subject_list = []
         for subject in object_list:
             subject_list.append(subject.name)
-        grades = Test.get_grades(student=request.user.id, subjects=subject_list, self=Test)
+        grades = Test.get_grades(student=request.user.id, subjects=subject_list)
         return render(request, 'noten.html', {'grades': grades})
     else:  # else redirect to login page
         return redirect('loginForm:login')
@@ -37,7 +38,8 @@ def absenzen(request):
         subject_list = []
         for subject in object_list:
             subject_list.append(subject.name)
-        absenzen = Absenzen.get_absenzen(student=request.user.id, subjects=subject_list, self=Absenzen)
-        return render(request, 'absenzen.html', {'absenzen': absenzen})
+        absenzen = Absenzen.get_absenzen(student=request.user.id, subjects=subject_list)
+        current_date = datetime.date.today
+        return render(request, 'absenzen.html', {'absenzen': absenzen, 'current_date': current_date})
     else:  # else redirect to login page
         return redirect('loginForm:login')

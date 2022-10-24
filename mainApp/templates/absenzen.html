@@ -16,10 +16,14 @@
                                 {% for absenzen_list in absenzen %}
                                     <div class="content-text">
                                         <li>Entschuldigt: {{ absenzen_list.0 }}</li>
-                                        {% if not absenzen_list.1 %}
-                                            <p>--> Abgabadatum: {{ absenzen_list.1 }}</p>
+                                        {% if absenzen_list.0 == 'Nein' %}
+                                            {% if absenzen_list.1 < current_date %}
+                                                <p><strong>Abgabedatum schon abgelaufen</strong></p>
+                                            {% else %}
+                                                <p>--> Abgabadatum: {{ absenzen_list.1 }}</p>
+                                            {% endif %}
                                         {% else %}
-                                            <p>Schon abgegeben :)</p>
+                                            <p>Abgegeben</p>
                                         {% endif %}
                                     </div>
                                 {% endfor %}
