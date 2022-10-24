@@ -7,13 +7,23 @@
                 <u>Persönliche Informationen:</u>
             </h2>
             <p>
-                Name: {{ user.first_name }} {{ user.last_name }}
+                {% if user.first_name|length > 0 and user.last_name|length > 0 %}
+                    Name: {{ user.first_name }} {{ user.last_name }}
+                    {% else %}
+                    Name: <strong>Kein Name angegeben, bitte wenden Sie sich an ihren Administrator!</strong>
+                {% endif %}
                 <br>
-                E-Mail: {{ user.email }}
+                {% if user.email|length > 0 %}
+                    E-Mail: {{ user.email }}
+                    {% else %}
+                    E-Mail: <strong>Keine E-Mail angegeben, bitte wenden Sie sich an ihren Administrator!</strong>
+                {% endif %}
                 <br>
                 Adresse: {{ user.return_address }}
                 <br>
-                Alter: {{ user.get_age }}
+                {% if user.get_age > 10 %}
+                    Alter: {{ user.get_age }} Jahre
+                {% endif %}
             </p>
         </div>
     </main>

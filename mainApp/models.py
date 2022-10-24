@@ -20,7 +20,7 @@ class Student(AbstractUser):
             return 'N/A'
 
     def get_age(self):
-        return f'{int((datetime.date.today() - self.birth).days / 365.25)} Jahre'
+        return int((datetime.date.today() - self.birth).days / 365.25)
 
     def __str__(self):
         return f'{self.first_name + " " + self.last_name}'
@@ -31,6 +31,9 @@ class Subject(models.Model):
 
     def __str__(self):
         return f'{self.name}'
+
+
+
 
 
 class Test(models.Model):
