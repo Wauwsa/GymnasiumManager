@@ -14,7 +14,7 @@ class Student(AbstractUser):
     code = models.IntegerField(validators=[MinValueValidator(0, MaxValueValidator(9999))], blank=True, null=True)
 
     def return_address(self):
-        if self.birth and self.street and self.street_number and self.city and self.province and self.code:
+        if self.street and self.street_number and self.city and self.province and self.code:
             return self.street + ' ' + str(self.street_number) + ' ' + self.city + ' ' + str(self.code) + ' ' + self.province
         else:
             return 'N/A'
@@ -31,9 +31,6 @@ class Subject(models.Model):
 
     def __str__(self):
         return f'{self.name}'
-
-
-
 
 
 class Test(models.Model):
