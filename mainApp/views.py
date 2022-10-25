@@ -35,7 +35,7 @@ def noten(request):
                 grades_sum += i['Note']
             if grades_turn != 0:
                 grades_sum_dict[key] = grades_sum / grades_turn
-        return render(request, 'noten.html', {'grades': grades, 'grades_sum': grades_sum_dict})
+        return render(request, 'noten.html', {'grades': grades, 'grades_sum_dict': grades_sum_dict})
     else:  # else redirect to login page
         return redirect('loginForm:login')
 

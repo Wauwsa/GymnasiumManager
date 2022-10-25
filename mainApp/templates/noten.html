@@ -10,7 +10,7 @@
             {% if grades %}
                 {% for subject, grades in grades.items %}
                     <button class="collapsible" type="button">
-                        <strong>{{ subject }}</strong> {% if grades_sum|get_item:subject != None %}({{ grades_sum|get_item:subject }}){% endif %}
+                        <strong>{{ subject }}</strong> {% if grades_sum_dict|get_item:subject != None %}({{ grades_sum_dict|get_item:subject }}){% endif %}
                     </button>
                     <div class="content">
                         {% if grades %}
