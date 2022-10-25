@@ -39,6 +39,13 @@ def absenzen(request):
         for subject in object_list:
             subject_list.append(subject.name)
         absenzen_local = Absenzen.get_absenzen(student=request.user.id, subjects=subject_list)
-        return render(request, 'absenzen.html', {'absenzen': absenzen_local})
+        absenzen_sum_dict = {}
+        for subject, absenz in absenzen_local.items():
+            absenzen_sum = 0
+            for absenz_list in absenz:
+                if absenz_list['Entschuldigt'] == 'Nein':
+                    absenzen_sum += 1
+            absenzen_sum_dict[subject] = absenzen_sum
+        return render(request, 'absenzen.html', {'absenzen': absenzen_local, 'absenzen_sum_dict': absenzen_sum_dict})
     else:  # else redirect to login page
         return redirect('loginForm:login')

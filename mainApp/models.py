@@ -66,29 +66,31 @@ class Absenzen(models.Model):
     date = models.DateField(default=datetime.date.today)
     excused = models.BooleanField(default=False, blank=True, null=True)
 
+
     def __str__(self):
         local_excuse = 'Ja' if self.excused else 'Nein'
         local_expire_date = self.date + datetime.timedelta(days=10)
         return f'{self.student.first_name}, {self.subject.name}, Entschuldigt: {local_excuse}, Abgabedatum: {local_expire_date}'
 
     def get_absenzen(student, subjects):
-        absenzen_dict = {}
+        absenzen_dict_complete = {}
         for subject in subjects:
-            absenzen_list_complete = []
+            absenzen_dict = {}
+            absenzen_list = []
             absenzen_object_list = Absenzen.objects.filter(student=student, subject__name=subject).order_by('-date')
             for absenz in absenzen_object_list:
-                absenzen_list = []
+                absenzen_dict = {}
                 expire_date = absenz.date + datetime.timedelta(days=10)
                 if absenz.excused:
-                    absenzen_list.append('Ja')
+                    absenzen_dict['Entschuldigt'] = 'Ja'
                 elif not absenz.excused:
-                    absenzen_list.append('Nein')
-                absenzen_list.append(expire_date.strftime('%d/%m/%Y'))
+                    absenzen_dict['Entschuldigt'] = 'Nein'
+                absenzen_dict['Abgabedatum'] = expire_date.strftime('%d/%m/%Y')
                 current_date = datetime.date.today()
                 if expire_date < current_date:
-                    absenzen_list.append(True)
+                    absenzen_dict['Abgelaufen'] = True
                 else:
-                    absenzen_list.append(False)
-                absenzen_list_complete.append(absenzen_list)
-            absenzen_dict[subject] = absenzen_list_complete
-        return absenzen_dict
+                    absenzen_dict['Abgelaufen'] = False
+                absenzen_list.append(absenzen_dict)
+            absenzen_dict_complete[subject] = absenzen_list
+        return absenzen_dict_complete

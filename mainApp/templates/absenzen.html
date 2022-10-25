@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+{% load main_extra %}
 
 {% block body %}
 
@@ -9,18 +10,20 @@
             </h1>
             {% if absenzen %}
                 {% for subject, absenzen in absenzen.items  %}
-                    <button class="collapsible" type="button">{{ subject }}</button>
+                    <button class="collapsible" type="button">
+                        <strong>{{ subject }}</strong> ({{ absenzen_sum_dict|get_item:subject }})
+                    </button>
                     <div class="content">
                         {% if absenzen %}
                             <ul>
-                                {% for absenzen_list in absenzen %}
+                                {% for absenzen_dict in absenzen %}
                                     <div class="content-text">
-                                        <li>Entschuldigt: {{ absenzen_list.0 }}</li>
-                                        {% if absenzen_list.0 == 'Nein' %}
-                                            {% if absenzen_list.2 %}
+                                        <li>Entschuldigt: {{ absenzen_dict.Entschuldigt }}</li>
+                                        {% if absenzen_dict.Entschuldigt == 'Nein' %}
+                                            {% if absenzen_dict.Abgelaufen %}
                                                 <p><strong>Abgabedatum schon abgelaufen</strong></p>
                                             {% else %}
-                                                <p>--> Abgabadatum: {{ absenzen_list.1 }}</p>
+                                                <p>--> Abgabadatum: {{ absenzen_dict.Abgabedatum }}</p>
                                             {% endif %}
                                         {% else %}
                                             <p>Abgegeben</p>
