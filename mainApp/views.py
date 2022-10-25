@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from .models import Test, Subject, Absenzen
-import datetime
 
 # Create your views here.
 # POST Logout muss nur in der View für Index getestet werden, da in HTML action="." --> Post wird zu root weitergeleitet
@@ -27,7 +26,16 @@ def noten(request):
         for subject in object_list:
             subject_list.append(subject.name)
         grades = Test.get_grades(student=request.user.id, subjects=subject_list)
-        return render(request, 'noten.html', {'grades': grades})
+        grades_sum_dict = {}
+        for key, value in grades.items():
+            grades_sum = 0
+            grades_turn = 0
+            for i in value:
+                grades_turn += 1
+                grades_sum += i['Note']
+            if grades_turn != 0:
+                grades_sum_dict[key] = grades_sum / grades_turn
+        return render(request, 'noten.html', {'grades': grades, 'grades_sum': grades_sum_dict})
     else:  # else redirect to login page
         return redirect('loginForm:login')
 
@@ -43,7 +51,7 @@ def absenzen(request):
         for subject, absenz in absenzen_local.items():
             absenzen_sum = 0
             for absenz_list in absenz:
-                if absenz_list['Entschuldigt'] == 'Nein':
+                if absenz_list['Entschuldigt'] == 'Nein' and not absenz_list['Abgelaufen']:  # alle unentschuldigten nicht abgelaufenen
                     absenzen_sum += 1
             absenzen_sum_dict[subject] = absenzen_sum
         return render(request, 'absenzen.html', {'absenzen': absenzen_local, 'absenzen_sum_dict': absenzen_sum_dict})

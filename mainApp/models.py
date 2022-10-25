@@ -43,21 +43,18 @@ class Test(models.Model):
         return f'Note: {self.grade}'
 
     def get_grades(student, subjects):
-        grades_dict = {}
-        if type(subjects) == list:
-            for subject in subjects:
-                grades_list = []
-                grades_object_list = Test.objects.filter(student=student, subject__name=subject)
-                for grade in grades_object_list:
-                    grades_list.append(grade.grade)
-                grades_dict[subject] = grades_list
-            return grades_dict
-        else:
-            grades_list = []
-            grades_object_list = Test.objects.filter(student=student, subject__name=subjects)
+        grades_dict_complete = {}
+        for subject in subjects:
+            grades_object_list = Test.objects.filter(student=student, subject__name=subject)
+            grade_dict = {}
+            grade_dict_list = []
             for grade in grades_object_list:
-                grades_list.append(grade.grade)
-            return grades_list
+                grade_dict = {}
+                grade_dict['Note'] = grade.grade
+                grade_dict['Datum'] = grade.date.strftime('%d/%m/%Y')
+                grade_dict_list.append(grade_dict)
+            grades_dict_complete[subject] = grade_dict_list
+        return grades_dict_complete
 
 
 class Absenzen(models.Model):
@@ -65,7 +62,6 @@ class Absenzen(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateField(default=datetime.date.today)
     excused = models.BooleanField(default=False, blank=True, null=True)
-
 
     def __str__(self):
         local_excuse = 'Ja' if self.excused else 'Nein'
@@ -77,7 +73,7 @@ class Absenzen(models.Model):
         for subject in subjects:
             absenzen_dict = {}
             absenzen_list = []
-            absenzen_object_list = Absenzen.objects.filter(student=student, subject__name=subject).order_by('-date')
+            absenzen_object_list = Absenzen.objects.filter(student=student, subject__name=subject).order_by('excused', '-date')
             for absenz in absenzen_object_list:
                 absenzen_dict = {}
                 expire_date = absenz.date + datetime.timedelta(days=10)

@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+{% load main_extra %}
 
 {% block body %}
     <main>
@@ -8,13 +9,16 @@
             </h1>
             {% if grades %}
                 {% for subject, grades in grades.items %}
-                    <button class="collapsible" type="button">{{ subject }}</button>
+                    <button class="collapsible" type="button">
+                        <strong>{{ subject }}</strong> {% if grades_sum|get_item:subject != None %}({{ grades_sum|get_item:subject }}){% endif %}
+                    </button>
                     <div class="content">
                         {% if grades %}
                             <ul>
                                 {% for grade in grades %}
                                     <div class="content-text">
-                                        <li>{{ grade }}</li>
+                                        <li>Note: <strong>{{ grade.Note }}</strong></li>
+                                        --> {{ grade.Datum }}
                                     </div>
                                 {% endfor %}
                             </ul>

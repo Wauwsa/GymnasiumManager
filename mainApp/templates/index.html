@@ -3,9 +3,9 @@
 {% block body %}
     <main>
         <div class="personal-info">
-            <h2>
+            <h1>
                 <u>Persönliche Informationen:</u>
-            </h2>
+            </h1>
             <p>
                 {% if user.first_name|length > 0 and user.last_name|length > 0 %}
                     Name: {{ user.first_name }} {{ user.last_name }}

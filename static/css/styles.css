@@ -89,19 +89,19 @@ button:focus {
 
 /* Index File */
 .personal-info {
-    padding-top: 50px;
+    padding-top: 2vh;
     padding-bottom: 10px;
-    margin-left: 200px;
+    margin-left: 2vw;
     color: #edf0f1;
 }
 
 /* Noten File */
 .collapsible {
-    background-color: #777;
+    background-color: #565656;
     color: white;
     cursor: pointer;
     padding: 18px;
-    width: 50%;
+    width: 70%;
     border: none;
     text-align: left;
     outline: none;
@@ -109,7 +109,7 @@ button:focus {
 }
 
 .active, .collapsible:hover {
-    background-color: #555;
+    background-color: #646464;
 }
 
 .content {
@@ -117,8 +117,8 @@ button:focus {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
-    background-color: var(--nav-bg-color);
-    width: 50%;
+    background-color: #333333;
+    width: 70%;
 }
 
 .content-text {
