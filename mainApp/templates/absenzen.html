@@ -17,7 +17,7 @@
                                     <div class="content-text">
                                         <li>Entschuldigt: {{ absenzen_list.0 }}</li>
                                         {% if absenzen_list.0 == 'Nein' %}
-                                            {% if absenzen_list.1 < current_date %}
+                                            {% if absenzen_list.2 %}
                                                 <p><strong>Abgabedatum schon abgelaufen</strong></p>
                                             {% else %}
                                                 <p>--> Abgabadatum: {{ absenzen_list.1 }}</p>

@@ -84,8 +84,11 @@ class Absenzen(models.Model):
                 elif not absenz.excused:
                     absenzen_list.append('Nein')
                 absenzen_list.append(expire_date.strftime('%d/%m/%Y'))
+                current_date = datetime.date.today()
+                if expire_date < current_date:
+                    absenzen_list.append(True)
+                else:
+                    absenzen_list.append(False)
                 absenzen_list_complete.append(absenzen_list)
-            print(absenzen_list_complete)
             absenzen_dict[subject] = absenzen_list_complete
-        print(absenzen_dict)
         return absenzen_dict
