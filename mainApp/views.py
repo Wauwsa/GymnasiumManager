@@ -42,18 +42,7 @@ def noten(request):
 
 def absenzen(request):
     if request.user.is_authenticated:  # if user is logged in
-        object_list = Subject.objects.order_by('name')
-        subject_list = []
-        for subject in object_list:
-            subject_list.append(subject.name)
-        absenzen_local = Absenzen.get_absenzen(student=request.user.id, subjects=subject_list)
-        absenzen_sum_dict = {}
-        for subject, absenz in absenzen_local.items():
-            absenzen_sum = 0
-            for absenz_list in absenz:
-                if absenz_list['Entschuldigt'] == 'Nein' and not absenz_list['Abgelaufen']:  # alle unentschuldigten nicht abgelaufenen
-                    absenzen_sum += 1
-            absenzen_sum_dict[subject] = absenzen_sum
-        return render(request, 'absenzen.html', {'absenzen': absenzen_local, 'absenzen_sum_dict': absenzen_sum_dict})
+        absenzen_local, absenzen_sum_local = Absenzen.get_absenzen(student=request.user.id)
+        return render(request, 'absenzen.html', {'absenzen': absenzen_local, 'absenzen_sum_dict': absenzen_sum_local})
     else:  # else redirect to login page
         return redirect('loginForm:login')
