@@ -56,6 +56,18 @@ class Test(models.Model):
             grades_dict_complete[subject] = grade_dict_list
         return grades_dict_complete
 
+    def get_avg(grades):
+        grades_sum_dict = {}
+        for key, value in grades.items():
+            grades_sum = 0
+            grades_turn = 0
+            for i in value:
+                grades_turn += 1
+                grades_sum += i['Note']
+            if grades_turn != 0:
+                grades_sum_dict[key] = round((grades_sum / grades_turn), 1)
+        return grades_sum_dict
+
 
 class Absenzen(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, blank=True, null=True)
@@ -64,7 +76,7 @@ class Absenzen(models.Model):
     excused = models.BooleanField(default=False, blank=True, null=True)
 
     def __str__(self):
-        local_excuse = 'Ja' if self.excused else 'Nein'
+        local_excuse = 'Ja' if self.excused else 'Nein'  # if self.excused == True set it to 'Ja'
         local_expire_date = self.date + datetime.timedelta(days=10)
         return f'{self.student.first_name}, {self.subject.name}, Entschuldigt: {local_excuse}, Abgabedatum: {local_expire_date}'
 
@@ -89,11 +101,14 @@ class Absenzen(models.Model):
                     absenzen_dict['Abgelaufen'] = False
                 absenzen_list.append(absenzen_dict)
             absenzen_dict_complete[subject.name] = absenzen_list
+        return absenzen_dict_complete
+
+    def get_sum(absenzen_dict):
         absenzen_sum_dict = {}
-        for subject, absenz in absenzen_dict_complete.items():
+        for subject, absenz in absenzen_dict.items():
             absenzen_sum = 0
             for absenz_list in absenz:
                 if absenz_list['Entschuldigt'] == 'Nein' and not absenz_list['Abgelaufen']:  # alle unentschuldigten nicht abgelaufenen
                     absenzen_sum += 1
             absenzen_sum_dict[subject] = absenzen_sum
-        return absenzen_dict_complete, absenzen_sum_dict
+        return absenzen_sum_dict

@@ -11,7 +11,7 @@
             {% if absenzen %}
                 {% for subject, absenzen in absenzen.items  %}
                     <button class="collapsible" type="button">
-                        <strong>{{ subject }}</strong> ({{ absenzen_sum_dict|get_item:subject }})
+                        <strong>{{ subject }}</strong> {% if absenzen_sum_dict|get_item:subject > 0 %}({{ absenzen_sum_dict|get_item:subject }}){% endif %}
                     </button>
                     <div class="content">
                         {% if absenzen %}

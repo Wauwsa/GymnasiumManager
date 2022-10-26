@@ -26,15 +26,7 @@ def noten(request):
         for subject in object_list:
             subject_list.append(subject.name)
         grades = Test.get_grades(student=request.user.id, subjects=subject_list)
-        grades_sum_dict = {}
-        for key, value in grades.items():
-            grades_sum = 0
-            grades_turn = 0
-            for i in value:
-                grades_turn += 1
-                grades_sum += i['Note']
-            if grades_turn != 0:
-                grades_sum_dict[key] = grades_sum / grades_turn
+        grades_sum_dict = Test.get_avg(grades=grades)
         return render(request, 'noten.html', {'grades': grades, 'grades_sum_dict': grades_sum_dict})
     else:  # else redirect to login page
         return redirect('loginForm:login')
@@ -42,7 +34,8 @@ def noten(request):
 
 def absenzen(request):
     if request.user.is_authenticated:  # if user is logged in
-        absenzen_local, absenzen_sum_local = Absenzen.get_absenzen(student=request.user.id)
+        absenzen_local = Absenzen.get_absenzen(student=request.user.id)
+        absenzen_sum_local = Absenzen.get_sum(absenzen_dict=absenzen_local)
         return render(request, 'absenzen.html', {'absenzen': absenzen_local, 'absenzen_sum_dict': absenzen_sum_local})
     else:  # else redirect to login page
         return redirect('loginForm:login')
