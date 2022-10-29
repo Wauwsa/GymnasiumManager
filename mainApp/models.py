@@ -33,6 +33,7 @@ class Person(AbstractUser):
 
 
 class Subject(models.Model):
+    teacher = models.ForeignKey(Person, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=20)
 
     def __str__(self):
@@ -81,7 +82,7 @@ class Absenzen(models.Model):
     student = models.ForeignKey(Person, on_delete=models.CASCADE, blank=True, null=True)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateField(default=datetime.date.today)
-    excused = models.BooleanField(default=False, blank=True, null=True)
+    excused = models.BooleanField(default=False)
 
     def __str__(self):
         local_excuse = 'Ja' if self.excused else 'Nein'  # if self.excused == True set it to 'Ja'
