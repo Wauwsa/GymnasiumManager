@@ -48,6 +48,7 @@ class Test(models.Model):
     def __str__(self):
         return f'Note: {self.grade}'
 
+    @staticmethod
     def get_grades(student, subjects):
         grades_dict_complete = {}
         for subject in subjects:
@@ -62,6 +63,7 @@ class Test(models.Model):
             grades_dict_complete[subject] = grade_dict_list
         return grades_dict_complete
 
+    @staticmethod
     def get_avg(grades):
         grades_sum_dict = {}
         for key, value in grades.items():
@@ -86,6 +88,7 @@ class Absenzen(models.Model):
         local_expire_date = self.date + datetime.timedelta(days=10)
         return f'{self.student.first_name}, {self.subject.name}, Entschuldigt: {local_excuse}, Abgabedatum: {local_expire_date}'
 
+    @staticmethod
     def get_absenzen(student):
         absenzen_dict_complete = {}
         object_list = Subject.objects.order_by('name')
@@ -109,6 +112,7 @@ class Absenzen(models.Model):
             absenzen_dict_complete[subject.name] = absenzen_list
         return absenzen_dict_complete
 
+    @staticmethod
     def get_sum(absenzen_dict):
         absenzen_sum_dict = {}
         for subject, absenz in absenzen_dict.items():
