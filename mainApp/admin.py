@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Test, Subject, Student, Absenzen
+from .models import Test, Subject, Person, Absenzen
 from django.contrib.auth.admin import UserAdmin
 
 # Register your models here.
@@ -56,5 +56,5 @@ class CustomStudentAdmin(UserAdmin):
 
 admin.site.register(Test)
 admin.site.register(Subject)
-admin.site.register(Student, CustomStudentAdmin)
+admin.site.register(Person, CustomStudentAdmin)
 admin.site.register(Absenzen)

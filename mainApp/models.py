@@ -5,7 +5,7 @@ import datetime
 # Create your models here.
 
 
-class Student(AbstractUser):
+class Person(AbstractUser):
     birth = models.DateField(default=datetime.date.today)
     street = models.CharField(max_length=25, blank=True, null=True)
     street_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(99)], blank=True, null=True)
@@ -40,7 +40,7 @@ class Subject(models.Model):
 
 
 class Test(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, blank=True, null=True)
+    student = models.ForeignKey(Person, on_delete=models.CASCADE, blank=True, null=True)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, blank=True, null=True)
     grade = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(6)], blank=True, null=True)
     date = models.DateField(default=datetime.date.today)
@@ -76,7 +76,7 @@ class Test(models.Model):
 
 
 class Absenzen(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE, blank=True, null=True)
+    student = models.ForeignKey(Person, on_delete=models.CASCADE, blank=True, null=True)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateField(default=datetime.date.today)
     excused = models.BooleanField(default=False, blank=True, null=True)
