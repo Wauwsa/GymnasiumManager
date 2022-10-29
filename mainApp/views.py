@@ -39,3 +39,19 @@ def absenzen(request):
         return render(request, 'absenzen.html', {'absenzen': absenzen_local, 'absenzen_sum_dict': absenzen_sum_local})
     else:  # else redirect to login page
         return redirect('loginForm:login')
+
+
+def panel(request):
+    if request.user.is_authenticated:
+        if request.user.is_teacher():
+            return render(request, 'panel.html')
+        else:
+            return redirect('mainApp:home')
+
+
+def klassen(request):
+    if request.user.is_authenticated:
+        if request.user.is_teacher():
+            return render(request, 'klassen.html')
+        else:
+            return redirect('mainApp:home')

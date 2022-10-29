@@ -22,6 +22,12 @@ class Student(AbstractUser):
     def get_age(self):
         return int((datetime.date.today() - self.birth).days / 365.25)
 
+    def is_student(self):
+        return self.groups.filter(name='Students').exists()
+
+    def is_teacher(self):
+        return self.groups.filter(name='Teachers').exists()
+
     def __str__(self):
         return f'{self.first_name + " " + self.last_name}'
 
