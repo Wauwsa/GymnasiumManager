@@ -13,6 +13,10 @@
                     Name: <strong>Kein Name angegeben, bitte wenden Sie sich an ihren Administrator!</strong>
                 {% endif %}
                 <br>
+                {% if user.klasse %}
+                    Klasse: {{ user.klasse }}
+                    <br>
+                {% endif %}
                 {% if user.email|length > 0 %}
                     E-Mail: {{ user.email }}
                     {% else %}

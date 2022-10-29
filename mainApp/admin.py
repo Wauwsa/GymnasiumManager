@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Test, Subject, Person, Absenzen
+from .models import Test, Subject, Person, Absenzen, SchoolClass
 from django.contrib.auth.admin import UserAdmin
 
 # Register your models here.
@@ -7,7 +7,7 @@ from django.contrib.auth.admin import UserAdmin
 
 class CustomStudentAdmin(UserAdmin):
     list_display = (
-        'username', 'email', 'first_name', 'last_name', 'is_staff',
+        'username', 'email', 'first_name', 'last_name', 'is_staff', 'klasse',
         'birth', 'street', 'street_number', 'city', 'province', 'code'
         )
 
@@ -28,7 +28,7 @@ class CustomStudentAdmin(UserAdmin):
             'fields': ('last_login', 'date_joined')
         }),
         ('Additional info', {
-            'fields': ('birth', 'street', 'street_number', 'city', 'province', 'code')
+            'fields': ('klasse', 'birth', 'street', 'street_number', 'city', 'province', 'code')
         })
     )
 
@@ -49,7 +49,7 @@ class CustomStudentAdmin(UserAdmin):
             'fields': ('last_login', 'date_joined')
         }),
         ('Additional info', {
-            'fields': ('birth', 'street', 'street_number', 'city', 'province', 'code')
+            'fields': ('klasse', 'birth', 'street', 'street_number', 'city', 'province', 'code')
         })
     )
 
@@ -58,3 +58,4 @@ admin.site.register(Test)
 admin.site.register(Subject)
 admin.site.register(Person, CustomStudentAdmin)
 admin.site.register(Absenzen)
+admin.site.register(SchoolClass)

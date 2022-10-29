@@ -5,7 +5,40 @@ import datetime
 # Create your models here.
 
 
+class SchoolClass(models.Model):
+    name = models.CharField(default='', max_length=5)
+
+    @staticmethod
+    def get_students(class_names):
+        student_dict = {}
+        for class_name in class_names:
+            student_list = []
+            student_objects = Person.objects.filter(klasse__name=class_name)
+            for student in student_objects:
+                if student.first_name and student.last_name:
+                    student_list.append(student.first_name + ' ' + student.last_name)
+            student_list.sort()
+            student_dict[class_name] = student_list
+        return student_dict
+
+    @staticmethod
+    def get_classes():
+        class_list = []
+        class_objects = SchoolClass.objects.order_by('name')
+        for single_class in class_objects:
+            class_list.append(single_class.name)
+        return class_list
+
+    def __str__(self):
+        return f'{self.name}'
+
+    class Meta:
+        verbose_name = 'School Class'
+        verbose_name_plural = "School Classes"
+
+
 class Person(AbstractUser):
+    klasse = models.ForeignKey(SchoolClass, on_delete=models.CASCADE, blank=True, null=True)
     birth = models.DateField(default=datetime.date.today)
     street = models.CharField(max_length=25, blank=True, null=True)
     street_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(99)], blank=True, null=True)
@@ -54,7 +87,6 @@ class Test(models.Model):
         grades_dict_complete = {}
         for subject in subjects:
             grades_object_list = Test.objects.filter(student=student, subject__name=subject)
-            grade_dict = {}
             grade_dict_list = []
             for grade in grades_object_list:
                 grade_dict = {}

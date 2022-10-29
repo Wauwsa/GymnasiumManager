@@ -2,6 +2,50 @@
 
 {% block body %}
     <main>
-        <h1>This is Klassen</h1>
+        <div class="personal-info">
+            <h1>
+                <u>Klassen:</u>
+            </h1>
+            {% if student_dict %}
+                {% for class, students in student_dict.items %}
+                    <button class="collapsible" type="button">
+                        <strong>{{ class }}</strong>
+                    </button>
+                    <div class="content">
+                        {% if students %}
+                            <ul>
+                                {% for student in students %}
+                                    <div class="content-text">
+                                        <li><strong>{{ student }}</strong></li>
+                                    </div>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <div class="content-text">
+                                <p>Noch keine Schüler in dieser Klasse!</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                {% else %}
+                <p>Noch keine Klassen erstellt!</p>
+            {% endif %}
+            <script>
+                const coll = document.getElementsByClassName("collapsible");
+                let i
+
+                for (i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function () {
+                        console.log(this.classList);
+                        const content = this.nextElementSibling;
+                        if (content.style.maxHeight) {
+                            content.style.maxHeight = null;
+                        } else {
+                            content.style.maxHeight = content.scrollHeight + "px";
+                        }
+                    });
+                }
+            </script>
+        </div>
     </main>
 {% endblock body %}

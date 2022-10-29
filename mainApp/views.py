@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
-from .models import Test, Subject, Absenzen
+from .models import Test, Subject, Absenzen, SchoolClass
 
 # Create your views here.
 # POST Logout muss nur in der View für Index getestet werden, da in HTML action="." --> Post wird zu root weitergeleitet
@@ -13,6 +13,7 @@ def main_page(request):
                 logout(request)  # logout the user
                 return redirect('loginForm:login')
         else:
+            print(SchoolClass.get_students('2a'))
             return render(request, 'index.html', {})
 
     else:  # else redirect to login page
@@ -52,6 +53,8 @@ def panel(request):
 def klassen(request):
     if request.user.is_authenticated:
         if request.user.is_teacher():
-            return render(request, 'klassen.html')
+            class_list = SchoolClass.get_classes()
+            student_dict = SchoolClass.get_students(class_names=class_list)
+            return render(request, 'klassen.html', {'student_dict': student_dict})
         else:
             return redirect('mainApp:home')
