@@ -13,7 +13,6 @@ def main_page(request):
                 logout(request)  # logout the user
                 return redirect('loginForm:login')
         else:
-            print(SchoolClass.get_students('2a'))
             return render(request, 'index.html', {})
 
     else:  # else redirect to login page
