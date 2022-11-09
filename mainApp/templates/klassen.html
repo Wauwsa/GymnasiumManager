@@ -16,7 +16,7 @@
                             <ul>
                                 {% for student in students %}
                                     <div class="content-text">
-                                        <li><strong>{{ student }}</strong></li>
+                                        <li><a href="{% url 'mainApp:detail' student.ID %}" class="link-styled">{{ student.Name }}</a></li>
                                     </div>
                                 {% endfor %}
                             </ul>

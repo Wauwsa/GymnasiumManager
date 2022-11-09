@@ -124,3 +124,8 @@ button:focus {
 .content-text {
     margin-top: 15px;
 }
+
+/* Schüler Details */
+.link-styled:hover {
+    color: #0088a9;
+}

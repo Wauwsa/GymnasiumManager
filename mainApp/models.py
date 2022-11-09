@@ -10,16 +10,18 @@ class SchoolClass(models.Model):
 
     @staticmethod
     def get_students(class_names):
-        student_dict = {}
+        students_dict = {}
         for class_name in class_names:
             student_list = []
             student_objects = Person.objects.filter(klasse__name=class_name)
             for student in student_objects:
+                student_dict = {}
                 if student.first_name and student.last_name:
-                    student_list.append(student.first_name + ' ' + student.last_name)
-            student_list.sort()
-            student_dict[class_name] = student_list
-        return student_dict
+                    student_dict['Name'] = student.first_name + ' ' + student.last_name
+                    student_dict['ID'] = student.id
+                student_list.append(student_dict)
+            students_dict[class_name] = sorted(student_list, key=lambda d: d['Name'])
+        return students_dict
 
     @staticmethod
     def get_classes():
@@ -56,10 +58,10 @@ class Person(AbstractUser):
         return int((datetime.date.today() - self.birth).days / 365.25)
 
     def is_student(self):
-        return self.groups.filter(name='Students').exists()
+        return self.groups.filter(name='Student').exists()
 
     def is_teacher(self):
-        return self.groups.filter(name='Teachers').exists()
+        return self.groups.filter(name='Teacher').exists()
 
     def __str__(self):
         return f'{self.first_name + " " + self.last_name}'
@@ -71,6 +73,14 @@ class Subject(models.Model):
 
     def __str__(self):
         return f'{self.name}'
+
+    @staticmethod
+    def get_subjects():
+        object_list = Subject.objects.order_by('name')
+        subject_list = []
+        for subject in object_list:
+            subject_list.append(subject.name)
+        return subject_list
 
 
 class Test(models.Model):
@@ -95,6 +105,18 @@ class Test(models.Model):
                 grade_dict_list.append(grade_dict)
             grades_dict_complete[subject] = grade_dict_list
         return grades_dict_complete
+
+    @staticmethod
+    def get_recent_grades(student):
+        grades_list_complete = []
+        grades_object_list = Test.objects.filter(student=student).order_by('-date')[:5]
+        for grade in grades_object_list:
+            grade_dict = {}
+            grade_dict['Note'] = grade.grade
+            grade_dict['Fach'] = grade.subject
+            grade_dict['Datum'] = grade.date.strftime('%d/%m/%Y')
+            grades_list_complete.append(grade_dict)
+        return grades_list_complete
 
     @staticmethod
     def get_avg(grades):

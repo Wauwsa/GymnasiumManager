@@ -27,6 +27,8 @@
                 <br>
                 {% if user.get_age > 10 %}
                     Alter: {{ user.get_age }} Jahre
+                {% else %}
+                    Alter: <strong>Kein Alter angegeben, bitte wenden Sie sich an ihren Administrator!</strong>
                 {% endif %}
             </p>
         </div>

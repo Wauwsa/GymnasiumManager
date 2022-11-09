@@ -1,0 +1,70 @@
+{% extends 'layout.html' %}
+{% load main_extra %}
+
+{% block body %}
+    <main>
+        <div class="personal-info">
+            <h1>
+                <u>Schüler Informationen:</u>
+            </h1>
+            <p>
+                {% if student.first_name|length > 0 and student.last_name|length > 0 %}
+                    Name: {{ student.first_name }} {{ student.last_name }}
+                {% else %}
+                    Name: <strong>Kein Name angegeben, bitte wenden Sie sich an ihren Administrator!</strong>
+                {% endif %}
+                <br>
+                {% if student.klasse %}
+                    Klasse: {{ student.klasse }}
+                    <br>
+                {% endif %}
+                {% if student.email|length > 0 %}
+                    E-Mail: {{ student.email }}
+                {% else %}
+                    E-Mail: <strong>Keine E-Mail angegeben, bitte wenden Sie sich an ihren Administrator!</strong>
+                {% endif %}
+                <br>
+                Adresse: {{ student.return_address }}
+                <br>
+                {% if student.get_age > 10 %}
+                    Alter: {{ student.get_age }} Jahre
+                {% else %}
+                    Alter: <strong>Kein Alter angegeben, bitte wenden Sie sich an ihren Administrator!</strong>
+                {% endif %}
+            </p>
+            <h1>
+                <u>Neueste Noten:</u>
+            </h1>
+            {% if recent_grades %}
+                {% for grade in recent_grades %}
+                    <button class="collapsible" type="button">
+                        <strong>{{ grade.Note }}</strong> ({{ grade.Fach }})
+                    </button>
+                    <div class="content">
+                        <div class="content-text">
+                            <p>--> {{ grade.Datum }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Dieser Schüler hat noch keine Noten</p>
+            {% endif %}
+        </div>
+    </main>
+    <script>
+        const coll = document.getElementsByClassName("collapsible");
+        let i
+
+        for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                const content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+        }
+    </script>
+{% endblock body %}

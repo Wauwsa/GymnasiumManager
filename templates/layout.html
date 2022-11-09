@@ -17,13 +17,13 @@
             <a href="/"><img class="logo" src="/static/images/logo.png" alt="logo"></a>
             <nav>
                 <ul class="nav__links">
-                    <li><a href='/'>Home</a></li>
+                    <li><a href='/'>Start</a></li>
                     {% if user.is_teacher %}
-                        <li><a href='klassen'>Klassen</a></li>
-                        <li><a href='panel'>Panel</a></li>
+                        <li><a href='/klassen'>Klassen</a></li>
+                        <li><a href='/panel'>Panel</a></li>
                     {% else %}
-                        <li><a href='noten'>Noten</a></li>
-                        <li><a href='absenzen'>Absenzen</a></li>
+                        <li><a href='/noten'>Noten</a></li>
+                        <li><a href='/absenzen'>Absenzen</a></li>
                     {% endif %}
                 </ul>
             </nav>
