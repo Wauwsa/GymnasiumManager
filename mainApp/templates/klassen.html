@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+{% load main_extra %}
 
 {% block body %}
     <main>
@@ -8,7 +9,7 @@
             </h1>
             {% if student_dict %}
                 {% for class, students in student_dict.items %}
-                    <button class="collapsible" type="button">
+                    <button class="collapsible" type="button" onclick="collapse_show_button(this)">
                         <strong>{{ class }}</strong>
                     </button>
                     <div class="content">
@@ -16,7 +17,7 @@
                             <ul>
                                 {% for student in students %}
                                     <div class="content-text">
-                                        <li><a href="{% url 'mainApp:detail' student.ID %}" class="link-styled">{{ student.Name }}</a></li>
+                                        <li><a href="{% url 'mainApp:detail' student.ID %}" class="link-styled">{{ student.Name }}</a>{% if student.ID|get_average_all %} <div class="noten-avg">({{ student.ID|get_average_all }})</div>{% endif %}</li>
                                     </div>
                                 {% endfor %}
                             </ul>
@@ -30,22 +31,6 @@
                 {% else %}
                 <p>Noch keine Klassen erstellt!</p>
             {% endif %}
-            <script>
-                const coll = document.getElementsByClassName("collapsible");
-                let i
-
-                for (i = 0; i < coll.length; i++) {
-                    coll[i].addEventListener("click", function () {
-                        console.log(this.classList);
-                        const content = this.nextElementSibling;
-                        if (content.style.maxHeight) {
-                            content.style.maxHeight = null;
-                        } else {
-                            content.style.maxHeight = content.scrollHeight + "px";
-                        }
-                    });
-                }
-            </script>
         </div>
     </main>
 {% endblock body %}

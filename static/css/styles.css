@@ -125,6 +125,14 @@ button:focus {
     margin-top: 15px;
 }
 
+.noten-avg {
+    display: inline;
+}
+
+.note-align-right {
+    float: right;
+}
+
 /* Schüler Details */
 .link-styled:hover {
     color: #0088a9;

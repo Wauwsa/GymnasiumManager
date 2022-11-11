@@ -23,7 +23,7 @@ def noten(request):
     if request.user.is_authenticated:  # if user is logged in
         subject_list = Subject.get_subjects()
         grades = Test.get_grades(student=request.user.id, subjects=subject_list)
-        grades_sum_dict = Test.get_avg(grades=grades)
+        grades_sum_dict = Test.get_avg_subject(grades=grades)
         return render(request, 'noten.html', {'grades': grades, 'grades_sum_dict': grades_sum_dict})
     else:  # else redirect to login page
         return redirect('loginForm:login')

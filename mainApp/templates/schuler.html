@@ -37,7 +37,7 @@
             </h1>
             {% if recent_grades %}
                 {% for grade in recent_grades %}
-                    <button class="collapsible" type="button">
+                    <button class="collapsible" type="button" onclick="collapse_show_button(this)">
                         <strong>{{ grade.Note }}</strong> ({{ grade.Fach }})
                     </button>
                     <div class="content">
@@ -51,20 +51,4 @@
             {% endif %}
         </div>
     </main>
-    <script>
-        const coll = document.getElementsByClassName("collapsible");
-        let i
-
-        for (i = 0; i < coll.length; i++) {
-            coll[i].addEventListener("click", function () {
-                this.classList.toggle("active");
-                const content = this.nextElementSibling;
-                if (content.style.maxHeight) {
-                    content.style.maxHeight = null;
-                } else {
-                    content.style.maxHeight = content.scrollHeight + "px";
-                }
-            });
-        }
-    </script>
 {% endblock body %}

@@ -119,16 +119,16 @@ class Test(models.Model):
         return grades_list_complete
 
     @staticmethod
-    def get_avg(grades):
+    def get_avg_subject(grades):
         grades_sum_dict = {}
         for key, value in grades.items():
             grades_sum = 0
-            grades_turn = 0
+            grades_length = 0
             for i in value:
-                grades_turn += 1
+                grades_length += 1
                 grades_sum += i['Note']
-            if grades_turn != 0:
-                grades_sum_dict[key] = round((grades_sum / grades_turn), 1)
+            if grades_length != 0:
+                grades_sum_dict[key] = round((grades_sum / grades_length), 1)
         return grades_sum_dict
 
 

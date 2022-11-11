@@ -10,7 +10,7 @@
             </h1>
             {% if absenzen %}
                 {% for subject, absenzen in absenzen.items  %}
-                    <button class="collapsible" type="button">
+                    <button class="collapsible" type="button" onclick="collapse_show_button(this)">
                         <strong>{{ subject }}</strong> {% if absenzen_sum_dict|get_item:subject > 0 %}({{ absenzen_sum_dict|get_item:subject }}){% endif %}
                     </button>
                     <div class="content">
@@ -41,22 +41,6 @@
                 {% else %}
                 <p>Noch keine Fächer eingetragen!</p>
             {% endif %}
-            <script>
-                const coll = document.getElementsByClassName("collapsible");
-                let i
-
-                for (i = 0; i < coll.length; i++) {
-                    coll[i].addEventListener("click", function () {
-                        console.log(this.classList);
-                        const content = this.nextElementSibling;
-                        if (content.style.maxHeight) {
-                            content.style.maxHeight = null;
-                        } else {
-                            content.style.maxHeight = content.scrollHeight + "px";
-                        }
-                    });
-                }
-            </script>
         </div>
     </main>
 {% endblock %}
