@@ -23,6 +23,9 @@ async function collapse_show_button(ele) {
     if (content.classList.contains('content-no-animation')) {
         content.classList.remove('content-no-animation')
     }
+    if (ele.classList.contains('collapsible-no-animation')) {
+        ele.classList.remove('collapsible-no-animation')
+    }
     if (content.classList.contains('content-bottom-collapsible')) { // checks if button is the one at bottom
         if (content.style.maxHeight) {
             localStorage.removeItem(all_buttons.indexOf(ele).toString())
@@ -75,6 +78,7 @@ function button_states() {
             const content = element.nextElementSibling;
             content.classList.add('content-no-animation')
             if (content.classList.contains('content-bottom-collapsible')) {
+                    element.classList.add('collapsible-no-animation')
                     element.classList.remove('bottom-collapsible')
                 }
             element.classList.toggle("active");

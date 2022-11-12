@@ -36,6 +36,12 @@ main {
     background-color: var(--main-bg-color);
     min-width: 100%;
     min-height: 100%;
+    max-width: 100%;
+}
+
+body {
+    height: calc(100vh - 84px); /* 100vh minus height navbar (84px) */
+    width: 100vw;
 }
 
 /* Login Form */
@@ -108,6 +114,10 @@ button:focus {
     text-align: left;
     outline: none;
     font-size: 15px;
+}
+
+.collapsible-no-animation {
+    transition: none !important;
 }
 
 .collapsible.top-collapsible {
