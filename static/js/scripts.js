@@ -12,13 +12,29 @@ function show_password() {
     }
 }
 
-function collapse_show_button(ele) {
+function sleep(milliseconds) {
+      return new Promise(resolve => setTimeout(resolve, milliseconds));
+   }
+
+async function collapse_show_button(ele) {
     ele.classList.toggle("active");
     const content = ele.nextElementSibling;
-    if (content.style.maxHeight) {
-        content.style.maxHeight = null;
+    if (content.classList.contains('content-bottom-collapsible')) { // checks if button is the one at bottom
+        if (content.style.maxHeight) {
+            content.style.maxHeight = null;
+            await sleep(100)
+            ele.classList.add('bottom-collapsible')  // adds the roundnesse
+        } else {
+            ele.classList.remove('bottom-collapsible') // removes roundness (content roundness always there)
+            await sleep(100)
+            content.style.maxHeight = content.scrollHeight + "px";
+        }
     } else {
-        content.style.maxHeight = content.scrollHeight + "px";
+        if (content.style.maxHeight) {
+            content.style.maxHeight = null;
+        } else {
+            content.style.maxHeight = content.scrollHeight + "px";
+        }
     }
 }
 
@@ -35,4 +51,12 @@ function change_color() { // change color depending on grade
             ele[x].style.color = "rgb(255, 0, 0)"
         }
     }
+}
+
+function button_radius() {
+    let ele = Array.from(document.getElementsByClassName('collapsible')) // get all elements that are collapsible
+    ele[0].classList.add('top-collapsible') // top one is rounded at top
+    ele[ele.length-1].classList.add('bottom-collapsible')
+    const content = ele[ele.length-1].nextElementSibling
+    content.classList.add('content-bottom-collapsible')
 }

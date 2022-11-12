@@ -8,9 +8,9 @@
             <h1>
                 <u>Absenzen:</u>
             </h1>
-            {% if absenzen %}
-                {% for subject, absenzen in absenzen.items  %}
-                    <button class="collapsible" type="button" onclick="collapse_show_button(this)">
+            {% if absenzen_dict %}
+                {% for subject, absenzen in absenzen_dict.items  %}
+                    <button class="{{ absenzen_dict.keys|get_class_button:subject }}" type="button" onclick="collapse_show_button(this)">
                         <strong>{{ subject }}</strong> {% if absenzen_sum_dict|get_item:subject > 0 %}({{ absenzen_sum_dict|get_item:subject }}){% endif %}
                     </button>
                     <div class="content">

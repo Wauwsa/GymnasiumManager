@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Test, Subject, Person, Absenzen, SchoolClass
+from .models import Test, Subject, Person, Absenzen, SchoolClass, Thema
 from django.contrib.auth.admin import UserAdmin
 
 # Register your models here.
@@ -59,3 +59,4 @@ admin.site.register(Subject)
 admin.site.register(Person, CustomStudentAdmin)
 admin.site.register(Absenzen)
 admin.site.register(SchoolClass)
+admin.site.register(Thema)

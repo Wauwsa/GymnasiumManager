@@ -37,12 +37,15 @@
             </h1>
             {% if recent_grades %}
                 {% for grade in recent_grades %}
-                    <button class="collapsible" type="button" onclick="collapse_show_button(this)">
+                    <button class="{{ recent_grades|get_class_button:grade }}" type="button" onclick="collapse_show_button(this)">
                         <strong>{{ grade.Note }}</strong> ({{ grade.Fach }})
                     </button>
                     <div class="content">
                         <div class="content-text">
-                            <p>--> {{ grade.Datum }}</p>
+                            <p>
+                                {% if grade.Thema != None %}Thema: {{ grade.Thema }}<br>{% endif %}
+                                --> {{ grade.Datum }}
+                            </p>
                         </div>
                     </div>
                 {% endfor %}

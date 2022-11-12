@@ -83,11 +83,30 @@ class Subject(models.Model):
         return subject_list
 
 
+class Thema(models.Model):
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, blank=True, null=True)
+    thema = models.CharField(max_length=50)
+
+    class Meta:
+        verbose_name = 'Thema'
+        verbose_name_plural = 'Themen'
+
+    def __str__(self):
+        return f'{self.thema}'
+
+
 class Test(models.Model):
     student = models.ForeignKey(Person, on_delete=models.CASCADE, blank=True, null=True)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, blank=True, null=True)
+    thema = models.ForeignKey(Thema, on_delete=models.CASCADE, blank=True, null=True)
+    school_class = models.ForeignKey(SchoolClass, on_delete=models.CASCADE, blank=True, null=True)
     grade = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(6)], blank=True, null=True)
     date = models.DateField(default=datetime.date.today)
+
+    def save(self, *args, **kwargs):
+        if not self.school_class and self.student:
+            self.school_class = self.student.klasse
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return f'Note: {self.grade}'
@@ -102,6 +121,7 @@ class Test(models.Model):
                 grade_dict = {}
                 grade_dict['Note'] = grade.grade
                 grade_dict['Datum'] = grade.date.strftime('%d/%m/%Y')
+                grade_dict['Thema'] = grade.thema
                 grade_dict_list.append(grade_dict)
             grades_dict_complete[subject] = grade_dict_list
         return grades_dict_complete
@@ -114,6 +134,7 @@ class Test(models.Model):
             grade_dict = {}
             grade_dict['Note'] = grade.grade
             grade_dict['Fach'] = grade.subject
+            grade_dict['Thema'] = grade.thema
             grade_dict['Datum'] = grade.date.strftime('%d/%m/%Y')
             grades_list_complete.append(grade_dict)
         return grades_list_complete

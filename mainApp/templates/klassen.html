@@ -9,7 +9,7 @@
             </h1>
             {% if student_dict %}
                 {% for class, students in student_dict.items %}
-                    <button class="collapsible" type="button" onclick="collapse_show_button(this)">
+                    <button class="{{ student_dict.keys|get_class_button:class }}" type="button" onclick="collapse_show_button(this)">
                         <strong>{{ class }}</strong>
                     </button>
                     <div class="content">
