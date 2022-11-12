@@ -11,7 +11,9 @@ def get_item(dictionary, key):
 @register.filter
 def get_class_button(local_dict, item):
     local_list = list(local_dict)
-    if local_list.index(item) == 0:
+    if len(local_list) == 1:
+        return 'collapsible bottom-collapsible top-collapsible'
+    elif local_list.index(item) == 0:
         return 'collapsible top-collapsible'
     elif local_list.index(item) == len(local_list) - 1:
         return 'collapsible bottom-collapsible'
