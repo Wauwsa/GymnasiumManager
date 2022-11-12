@@ -138,6 +138,15 @@ button:focus {
     width: 50%;
 }
 
+.content-no-animation {
+    padding: 0 20px;
+    max-height: 0;
+    overflow: hidden;
+    transition: none !important;
+    background-color: #333333;
+    width: 50%;
+}
+
 .content-text {
     margin-top: 15px;
 }
