@@ -17,22 +17,27 @@ function sleep(milliseconds) {
    }
 
 async function collapse_show_button(ele) {
+    let all_buttons = Array.from(document.getElementsByClassName('collapsible'))
     ele.classList.toggle("active");
     const content = ele.nextElementSibling;
     if (content.classList.contains('content-bottom-collapsible')) { // checks if button is the one at bottom
         if (content.style.maxHeight) {
+            localStorage.removeItem(all_buttons.indexOf(ele).toString())
             content.style.maxHeight = null;
             await sleep(100)
             ele.classList.add('bottom-collapsible')  // adds the roundnesse
         } else {
+            localStorage.setItem(all_buttons.indexOf(ele).toString(), 'active')
             ele.classList.remove('bottom-collapsible') // removes roundness (content roundness always there)
             await sleep(100)
             content.style.maxHeight = content.scrollHeight + "px";
         }
     } else {
         if (content.style.maxHeight) {
+            localStorage.removeItem(all_buttons.indexOf(ele).toString())
             content.style.maxHeight = null;
         } else {
+            localStorage.setItem(all_buttons.indexOf(ele).toString(), 'active')
             content.style.maxHeight = content.scrollHeight + "px";
         }
     }
@@ -57,4 +62,14 @@ function button_radius() {
     let ele = Array.from(document.getElementsByClassName('collapsible')) // get all elements that are collapsible
     const content = ele[ele.length-1].nextElementSibling // get the content for last button
     content.classList.add('content-bottom-collapsible')
+}
+
+function button_states() {
+    let elements = Array.from(document.getElementsByClassName('collapsible'))
+    elements.forEach(function (element, index) {
+        let state = localStorage.getItem(index.toString())
+        if (state === 'active') {
+            collapse_show_button(element)
+        }
+    })
 }
