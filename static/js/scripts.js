@@ -55,8 +55,6 @@ function change_color() { // change color depending on grade
 
 function button_radius() {
     let ele = Array.from(document.getElementsByClassName('collapsible')) // get all elements that are collapsible
-    ele[0].classList.add('top-collapsible') // top one is rounded at top
-    ele[ele.length-1].classList.add('bottom-collapsible')
-    const content = ele[ele.length-1].nextElementSibling
+    const content = ele[ele.length-1].nextElementSibling // get the content for last button
     content.classList.add('content-bottom-collapsible')
 }
