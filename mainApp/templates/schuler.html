@@ -44,7 +44,11 @@
                         <div class="content-text">
                             <p>
                                 {% if grade.Thema != None %}Thema: {{ grade.Thema }}<br>{% endif %}
-                                --> {{ grade.Datum }}
+                                Datum: {{ grade.Datum }}
+                                {% if klasse|get_avg_class:grade.Thema %}
+                                    <br>
+                                    Klassenschnitt: {{ klasse|get_avg_class:grade.Thema }}
+                                {% endif %}
                             </p>
                         </div>
                     </div>

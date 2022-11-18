@@ -41,3 +41,10 @@ def get_avg_class(klasse, thema):
             grades.append(grade.grade)
         return round(sum(grades) / len(grades), 1)
     return None
+
+
+@register.filter
+def get_number_students(klasse):
+    if len(klasse) > 0:
+        return len(klasse)
+    return None

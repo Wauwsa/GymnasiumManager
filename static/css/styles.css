@@ -165,7 +165,7 @@ button:focus {
     display: inline;
 }
 
-.note-align-right {
+.items_align_right {
     background-color: rgba(16, 16, 16, 0.3);
     box-shadow: 0 0 0 6px rgba(16, 16, 16, 0.3);
     border-radius: 20px;

@@ -1,7 +1,30 @@
 {% extends 'layout.html' %}
+{% load main_extra %}
 
 {% block body %}
     <main>
-        <h1>This is the Teacher Panel</h1>
+        <div class="personal-info">
+            <h1>
+                <u>Deine Klasse:</u>
+            </h1>
+            <button class="collapsible bottom-collapsible top-collapsible" type="button" onclick="collapse_show_button(this)">
+                Klasse: {{ klasse.Klasse }}<div class="items_align_right">{{ klasse.Students|get_number_students }} Schüler</div>
+            </button>
+            <div class="content">
+                {% if klasse.Students %}
+                    <ul>
+                        {% for student in klasse.Students %}
+                            <div class="content-text">
+                                <li><a href="{% url 'mainApp:detail' student.ID %}" class="link-styled">{{ student.Name }}</a>{% if student.ID|get_average_all %} <div class="noten-avg">({{ student.ID|get_average_all }})</div>{% endif %}</li>
+                            </div>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="content-text">
+                        <p>Noch keine Schüler in dieser Klasse!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
     </main>
 {% endblock body %}

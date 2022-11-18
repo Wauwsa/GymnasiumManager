@@ -2,6 +2,8 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import AbstractUser
 import datetime
+
+
 # Create your models here.
 
 
@@ -9,19 +11,36 @@ class SchoolClass(models.Model):
     name = models.CharField(default='', max_length=5)
 
     @staticmethod
-    def get_students(class_names):
-        students_dict = {}
-        for class_name in class_names:
-            student_list = []
-            student_objects = Person.objects.filter(klasse__name=class_name)
-            for student in student_objects:
+    def get_students(class_name):
+        student_list = []
+        student_objects = Person.objects.filter(klasse__name=class_name)
+        for student in student_objects:
+            if student.is_student():
                 student_dict = {}
                 if student.first_name and student.last_name:
                     student_dict['Name'] = student.first_name + ' ' + student.last_name
                     student_dict['ID'] = student.id
                 student_list.append(student_dict)
+        return student_list
+
+    @staticmethod
+    def get_students_classes(class_names):
+        students_dict = {}
+        for class_name in class_names:
+            student_list = SchoolClass.get_students(class_name)
             students_dict[class_name] = sorted(student_list, key=lambda d: d['Name'])
         return students_dict
+
+    @staticmethod
+    def get_class_of_teacher(teacher_id):
+        teacher_objects = Person.objects.filter(pk=teacher_id)
+        klasse_dict = {}
+        for teachers in teacher_objects:
+            if teachers.is_teacher():
+                klasse_dict['Klasse'] = teachers.klasse.name
+                klasse_dict['Students'] = teachers.klasse.get_students(teachers.klasse.name)
+                return klasse_dict
+            return None
 
     @staticmethod
     def get_classes():
@@ -100,7 +119,7 @@ class Test(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, blank=True, null=True)
     thema = models.ForeignKey(Thema, on_delete=models.CASCADE, blank=True, null=True)
     school_class = models.ForeignKey(SchoolClass, on_delete=models.CASCADE, blank=True, null=True)
-    grade = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(6)], blank=True, null=True)
+    grade = models.FloatField(validators=[MinValueValidator(1), MaxValueValidator(6)], blank=True, null=True)
     date = models.DateField(default=datetime.date.today)
 
     def save(self, *args, **kwargs):
@@ -127,9 +146,12 @@ class Test(models.Model):
         return grades_dict_complete
 
     @staticmethod
-    def get_recent_grades(student):
+    def get_recent_grades(student_id):
         grades_list_complete = []
-        grades_object_list = Test.objects.filter(student=student).order_by('-date')[:5]
+        grades_object_list = Test.objects.filter(student=student_id).order_by('-date')[:5]
+        student_objects = Person.objects.filter(pk=student_id)
+        for student_object in student_objects:
+            klasse = student_object.klasse
         for grade in grades_object_list:
             grade_dict = {}
             grade_dict['Note'] = grade.grade
@@ -137,7 +159,7 @@ class Test(models.Model):
             grade_dict['Thema'] = grade.thema
             grade_dict['Datum'] = grade.date.strftime('%d/%m/%Y')
             grades_list_complete.append(grade_dict)
-        return grades_list_complete
+        return grades_list_complete, klasse
 
     @staticmethod
     def get_avg_subject(grades):
