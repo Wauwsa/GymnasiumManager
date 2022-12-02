@@ -5,7 +5,7 @@
     <main>
         <div class="personal-info">
             <h1>
-                <u>Noten:</u> {% if grades_dict %}({{ user.id|get_average_all }}){% endif %}
+                <u>Noten:</u> {% if user.id|get_average_all != None %}({{ user.id|get_average_all }}){% endif %}
             </h1>
             {% if grades_dict %}
                 {% for subject, grades in grades_dict.items %}

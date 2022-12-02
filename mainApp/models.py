@@ -5,8 +5,6 @@ import datetime
 
 
 # Create your models here.
-
-
 class SchoolClass(models.Model):
     name = models.CharField(default='', max_length=5)
 

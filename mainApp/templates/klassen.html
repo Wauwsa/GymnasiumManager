@@ -13,6 +13,13 @@
                         Klasse: <strong>{{ class }}</strong>{% if students|get_number_students %}<div class="items_align_right">{{ students|get_number_students }} Schüler</div>{% endif %}
                     </button>
                     <div class="content">
+                        <div class="content-text-title">
+                            <h5>
+                                {% if class|get_teacher_of_class != None%}
+                                    Klassenlehrperson: {{ class|get_teacher_of_class }}
+                                {% endif %}
+                            </h5>
+                        </div>
                         {% if students %}
                             <ul>
                                 {% for student in students %}

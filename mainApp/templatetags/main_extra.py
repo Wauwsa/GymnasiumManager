@@ -1,5 +1,5 @@
 from django import template
-from ..models import Test
+from ..models import Test, Person
 register = template.Library()
 
 
@@ -48,3 +48,14 @@ def get_number_students(klasse):
     if len(klasse) > 0:
         return len(klasse)
     return None
+
+
+@register.filter
+def get_teacher_of_class(klasse):
+    members_objects = Person.objects.filter(klasse__name=klasse)
+    for member in members_objects:
+        if member.is_teacher():
+            if member.first_name and member.last_name:
+                return member.first_name + ' ' + member.last_name
+            return None
+        return None
