@@ -34,12 +34,13 @@ def get_average_all(student_id):
 
 @register.filter
 def get_avg_class(klasse, thema):
-    grades_object_list = Test.objects.filter(school_class=klasse, thema=thema)
-    grades = []
-    if thema and grades_object_list:
-        for grade in grades_object_list:
-            grades.append(grade.grade)
-        return round(sum(grades) / len(grades), 1)
+    if thema:
+        grades_object_list = Test.objects.filter(school_class=klasse, thema=thema)
+        grades = []
+        if thema and grades_object_list:
+            for grade in grades_object_list:
+                grades.append(grade.grade)
+            return round(sum(grades) / len(grades), 1)
     return None
 
 

@@ -13,7 +13,11 @@ def main_page(request):
                 logout(request)  # logout the user
                 return redirect('loginForm:login')
         else:
-            return render(request, 'index.html', {})
+            subject_list = Subject.get_subjects()
+            grades = Test.get_grades(student=request.user.id, subjects=subject_list)
+            grades_sum_dict = Test.get_avg_subject(grades=grades)
+            avg_notes = list(grades_sum_dict.values())
+            return render(request, 'index.html', {'avg_notes': avg_notes, 'subject_list': subject_list})
 
     else:  # else redirect to login page
         return redirect('loginForm:login')

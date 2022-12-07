@@ -19,6 +19,8 @@
                                     <div class="content-text">
                                         <li>Note: <strong>{{ grade.Note }}</strong>{% if grade.Thema != None %} ({{ grade.Thema }}) {% endif %}</li>
                                         Datum: {{ grade.Datum }}
+                                        <br>
+                                        Gewichtung: {{ grade.Gewichtung }}
                                         {% if user.klasse|get_avg_class:grade.Thema != None%}
                                         <br>
                                         Klassenschnitt: {{ user.klasse|get_avg_class:grade.Thema }}
