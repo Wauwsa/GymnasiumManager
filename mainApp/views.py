@@ -69,8 +69,8 @@ def detail(request, student_id):
     if request.user.is_authenticated:
         if request.user.is_teacher():
             student = get_object_or_404(Person, pk=student_id)
-            recent_grades, klasse = Test.get_recent_grades(student_id=student_id)
-            return render(request, 'schuler.html', {'student': student, 'recent_grades': recent_grades, 'klasse': klasse})
+            recent_grades = Test.get_recent_grades(student_id=student_id)
+            return render(request, 'schuler.html', {'student': student, 'recent_grades': recent_grades})
         else:
             return redirect('mainApp:home')
     else:  # else redirect to login page

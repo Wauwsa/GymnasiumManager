@@ -113,7 +113,7 @@ class Test(models.Model):
     thema = models.ForeignKey(Thema, on_delete=models.CASCADE, blank=True, null=True)
     school_class = models.ForeignKey(SchoolClass, on_delete=models.CASCADE, blank=True, null=True)  # need that to calculate average of class in one thema
     grade = models.FloatField(validators=[MinValueValidator(1), MaxValueValidator(6)], blank=True, null=True)
-    weight = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(1)], blank=True, null=True, default=1)
+    weight = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(99)], blank=True, null=True, default=1)
     date = models.DateField(default=datetime.date.today)
 
     def save(self, *args, **kwargs):
@@ -151,13 +151,13 @@ class Test(models.Model):
             grade_dict['Thema'] = grade.thema
             grade_dict['Datum'] = grade.date.strftime('%d/%m/%Y')
             grades_list_complete.append(grade_dict)
-        return grades_list_complete, grade.student.klasse
+        return grades_list_complete
 
     @staticmethod
     def get_avg_subject(grades):
         grades_sum_dict = {}
         for subject, subject_grades in grades.items():
-            if len(subject_grades) != 0:
+            if len(subject_grades) != 0:  # if there are grades in this subject
                 # Retrieve the weights for the grades in this subject
                 weights = [grade['Gewichtung'] for grade in subject_grades]
                 # Calculate the weighted sum of the grades
