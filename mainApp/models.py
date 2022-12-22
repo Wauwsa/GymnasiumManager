@@ -36,9 +36,11 @@ class SchoolClass(models.Model):
         except Person.DoesNotExist:
             return None
         if teacher.is_teacher():
+            students = teacher.klasse.get_students(teacher.klasse.name)
+            sorted_students = sorted(students, key=lambda student: student['Name'])
             return {
                 'Klasse': teacher.klasse.name,
-                'Students': teacher.klasse.get_students(teacher.klasse.name)
+                'Students': sorted_students
             }
         else:
             return None
@@ -108,34 +110,43 @@ class Thema(models.Model):
 
 
 class Test(models.Model):
-    student = models.ForeignKey(Person, on_delete=models.CASCADE, blank=True, null=True)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, blank=True, null=True)
     thema = models.ForeignKey(Thema, on_delete=models.CASCADE, blank=True, null=True)
     school_class = models.ForeignKey(SchoolClass, on_delete=models.CASCADE, blank=True, null=True)  # need that to calculate average of class in one thema
-    grade = models.FloatField(validators=[MinValueValidator(1), MaxValueValidator(6)], blank=True, null=True)
     weight = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(99)], blank=True, null=True, default=1)
     date = models.DateField(default=datetime.date.today)
 
     def save(self, *args, **kwargs):
-        if not self.school_class and self.student:
-            self.school_class = self.student.klasse
+        request = kwargs.pop('request', None)
+        if not self.school_class and request.user:
+            self.school_class = request.user.klasse
         return super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'{self.student.first_name + " " + self.student.last_name}, Note: {self.grade}, Fach: {self.subject}'
+        return f'{self.subject}, {self.thema}'
+
+
+class Grade(models.Model):
+    student = models.ForeignKey(Person, on_delete=models.CASCADE, blank=True, null=True)
+    grade = models.FloatField(validators=[MinValueValidator(1), MaxValueValidator(6)], blank=True, null=True)
+    test = models.ForeignKey(Test, on_delete=models.CASCADE, blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.student}, {self.grade}'
 
     @staticmethod
     def get_grades(student, subjects):
         grades_dict_complete = {}
         for subject in subjects:
-            grades_object_list = Test.objects.filter(student=student, subject__name=subject)
+            grades_object_list = Grade.objects.filter(student=student, test__subject__name=subject)
+            print(grades_object_list)
             grade_dict_list = []
             for grade in grades_object_list:
                 grade_dict = {}
                 grade_dict['Note'] = grade.grade
-                grade_dict['Datum'] = grade.date.strftime('%d/%m/%Y')
-                grade_dict['Thema'] = grade.thema
-                grade_dict['Gewichtung'] = grade.weight
+                grade_dict['Datum'] = grade.test.date.strftime('%d/%m/%Y')
+                grade_dict['Thema'] = grade.test.thema
+                grade_dict['Gewichtung'] = grade.test.weight
                 grade_dict_list.append(grade_dict)
             grades_dict_complete[subject] = grade_dict_list
         return grades_dict_complete
@@ -143,14 +154,16 @@ class Test(models.Model):
     @staticmethod
     def get_recent_grades(student_id):
         grades_list_complete = []
-        grades_object_list = Test.objects.filter(student=student_id).select_related('student').order_by('-date')[:5]
+        grades_object_list = Grade.objects.filter(student_id=student_id)
         for grade in grades_object_list:
             grade_dict = {}
             grade_dict['Note'] = grade.grade
-            grade_dict['Fach'] = grade.subject
-            grade_dict['Thema'] = grade.thema
-            grade_dict['Datum'] = grade.date.strftime('%d/%m/%Y')
+            grade_dict['Fach'] = grade.test.subject
+            grade_dict['Thema'] = grade.test.thema
+            grade_dict['Datum'] = grade.test.date.strftime('%d/%m/%Y')
+            grade_dict['Gewichtung'] = grade.test.weight
             grades_list_complete.append(grade_dict)
+        print(grades_list_complete)
         return grades_list_complete
 
     @staticmethod
@@ -167,7 +180,7 @@ class Test(models.Model):
                 # Divide the weighted sum by the total weight to get the average
                 grades_sum_dict[subject] = round(weighted_sum / sum(weights), 1)
         return grades_sum_dict
-    
+
 
 class Absenzen(models.Model):
     student = models.ForeignKey(Person, on_delete=models.CASCADE, blank=True, null=True)

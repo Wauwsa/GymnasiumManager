@@ -11,7 +11,7 @@
             {% if absenzen_dict %}
                 {% for subject, absenzen in absenzen_dict.items  %}
                     <button class="{{ absenzen_dict.keys|get_class_button:subject }}" type="button" onclick="collapse_show_button(this)">
-                        <strong>{{ subject }}</strong> {% if absenzen_sum_dict|get_item:subject > 0 %}({{ absenzen_sum_dict|get_item:subject }}){% endif %}
+                        <strong>{{ subject }}</strong> {% if absenzen_sum_dict|get_item:subject > 0 %}<div class="items-align-right round-border">({{ absenzen_sum_dict|get_item:subject }})</div>{% endif %}
                     </button>
                     <div class="content">
                         {% if absenzen %}
@@ -23,7 +23,7 @@
                                             {% if absenzen_dict.Abgelaufen %}
                                                 <p><strong>Abgabedatum schon abgelaufen</strong></p>
                                             {% else %}
-                                                <p>--> Abgabadatum: {{ absenzen_dict.Abgabedatum }}</p>
+                                                <p>--> Abgabedatum: {{ absenzen_dict.Abgabedatum }}</p>
                                             {% endif %}
                                         {% else %}
                                             <p>Abgegeben</p>

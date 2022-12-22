@@ -64,6 +64,7 @@ async function collapse_show_button(ele) {
 
 function change_color() { // change color depending on grade
     let ele = Array.from(document.getElementsByClassName("noten-avg")) // div needs class "noten-avg"
+    console.log(ele)
     for (let x in ele) {
         let current_element = ele[x]
         let i = current_element.innerText.toString().replace(/[()]/g, "") // replaces () in inner text

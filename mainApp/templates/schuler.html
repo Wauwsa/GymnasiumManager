@@ -45,6 +45,8 @@
                             <p>
                                 {% if grade.Thema != None %}Thema: {{ grade.Thema }}<br>{% endif %}
                                 Datum: {{ grade.Datum }}
+                                <br>
+                                Gewichtung: {{ grade.Gewichtung }}
                                 {% if student.klasse|get_avg_class:grade.Thema %}
                                     <br>
                                     Klassenschnitt: {{ student.klasse|get_avg_class:grade.Thema }}

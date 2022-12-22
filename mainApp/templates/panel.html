@@ -8,7 +8,7 @@
                 <u>Deine Klasse:</u>
             </h1>
             <button class="collapsible bottom-collapsible top-collapsible" type="button" onclick="collapse_show_button(this)">
-                Klasse: {{ klasse.Klasse }}<div class="items_align_right">{{ klasse.Students|get_number_students }} Schüler</div>
+                Klasse: {{ klasse.Klasse }}<div class="items-align-right round-border">{{ klasse.Students|get_number_students }} Schüler</div>
             </button>
             <div class="content">
                 {% if klasse.Students %}

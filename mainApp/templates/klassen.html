@@ -10,7 +10,7 @@
             {% if student_dict %}
                 {% for class, students in student_dict.items %}
                     <button class="{{ student_dict.keys|get_class_button:class }}" type="button" onclick="collapse_show_button(this)">
-                        Klasse: <strong>{{ class }}</strong>{% if students|get_number_students %}<div class="items_align_right">{{ students|get_number_students }} Schüler</div>{% endif %}
+                        Klasse: <strong>{{ class }}</strong>{% if students|get_number_students %}<div class="items-align-right round-border">{{ students|get_number_students }} Schüler</div>{% endif %}
                     </button>
                     <div class="content">
                         <div class="content-text-title">

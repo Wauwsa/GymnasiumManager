@@ -10,7 +10,7 @@
             {% if grades_dict %}
                 {% for subject, grades in grades_dict.items %}
                     <button class="{{ grades_dict.keys|get_class_button:subject }}" type="button" onclick="collapse_show_button(this)">
-                        <strong>{{ subject }}</strong> {% if grades_sum_dict|get_item:subject != None %}<div class="noten-avg items_align_right">({{ grades_sum_dict|get_item:subject }})</div>{% endif %}
+                        <strong>{{ subject }}</strong> {% if grades_sum_dict|get_item:subject != None %}<div class="noten-avg items-align-right round-border">({{ grades_sum_dict|get_item:subject }})</div>{% endif %}
                     </button>
                     <div class="content">
                         {% if grades %}

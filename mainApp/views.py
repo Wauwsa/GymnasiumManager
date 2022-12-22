@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import logout
-from .models import Test, Subject, Absenzen, SchoolClass, Person
+from .models import Test, Subject, Absenzen, SchoolClass, Person, Grade
 
 # Create your views here.
 # POST Logout muss nur in der View für Index getestet werden, da in HTML action="." --> Post wird zu root weitergeleitet
@@ -13,11 +13,8 @@ def main_page(request):
                 logout(request)  # logout the user
                 return redirect('loginForm:login')
         else:
-            subject_list = Subject.get_subjects()
-            grades = Test.get_grades(student=request.user.id, subjects=subject_list)
-            grades_sum_dict = Test.get_avg_subject(grades=grades)
-            avg_notes = list(grades_sum_dict.values())
-            return render(request, 'index.html', {'avg_notes': avg_notes, 'subject_list': subject_list})
+            recent_grades = Grade.get_recent_grades(student_id=request.user.id)
+            return render(request, 'index.html', {'recent_grades': recent_grades})
 
     else:  # else redirect to login page
         return redirect('loginForm:login')
@@ -26,8 +23,8 @@ def main_page(request):
 def noten(request):
     if request.user.is_authenticated:  # if user is logged in
         subject_list = Subject.get_subjects()
-        grades = Test.get_grades(student=request.user.id, subjects=subject_list)
-        grades_sum_dict = Test.get_avg_subject(grades=grades)
+        grades = Grade.get_grades(student=request.user.id, subjects=subject_list)
+        grades_sum_dict = Grade.get_avg_subject(grades=grades)
         return render(request, 'noten.html', {'grades_dict': grades, 'grades_sum_dict': grades_sum_dict})
     else:  # else redirect to login page
         return redirect('loginForm:login')
@@ -69,7 +66,7 @@ def detail(request, student_id):
     if request.user.is_authenticated:
         if request.user.is_teacher():
             student = get_object_or_404(Person, pk=student_id)
-            recent_grades = Test.get_recent_grades(student_id=student_id)
+            recent_grades = Grade.get_recent_grades(student_id=student_id)
             return render(request, 'schuler.html', {'student': student, 'recent_grades': recent_grades})
         else:
             return redirect('mainApp:home')

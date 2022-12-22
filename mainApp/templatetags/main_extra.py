@@ -1,5 +1,5 @@
 from django import template
-from ..models import Test, Person
+from ..models import Person, Grade
 register = template.Library()
 
 
@@ -22,7 +22,7 @@ def get_class_button(local_dict, item):
 
 @register.filter
 def get_average_all(student_id):
-    grades_object_list = Test.objects.filter(student__id=student_id)
+    grades_object_list = Grade.objects.filter(student__id=student_id)
     grades_list = []
     if grades_object_list:
         for grade in grades_object_list:
@@ -35,7 +35,7 @@ def get_average_all(student_id):
 @register.filter
 def get_avg_class(klasse, thema):
     if thema:
-        grades_object_list = Test.objects.filter(school_class=klasse, thema=thema)
+        grades_object_list = Grade.objects.filter(test__school_class=klasse, test__thema=thema)
         grades = []
         if thema and grades_object_list:
             for grade in grades_object_list:
