@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+{% load main_extra %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+    <main>
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill"></i> {{ message }}
+                    <button type="button" class="close" aria-label="Close" data-bs-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% elif message.tags == 'success' %}
+                <div class="alert alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle-fill"></i> {{ message }}
+                    <button type="button" class="close" aria-label="Close" data-bs-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+        <div class="personal-info">
+            <div style="width:50%">
+                <form method="POST" action="/new-test" style="transform: translateY(10px)">
+                    {% csrf_token %}
+                    <button type="submit" name="new-test" value="new-test" class="small-button-align-right small-button">Neuen Test eintragen</button>
+                </form>
+                <h1>
+                    <u>Neue Note eintragen:</u>
+                </h1>
+            </div>
+            <form action="/new-grade" method="POST" class="form-group">
+                {% csrf_token %}
+                <div class="form-outline mb-3" style="width:50%">
+                    {{ form.student|as_crispy_field }}
+                </div>
+                <div class="form-outline mb-3" style="width:50%">
+                    {{ form.test|as_crispy_field }}
+                </div>
+                <div class="form-outline mb-3" style="width:50%">
+                {{ form.grade|as_crispy_field }}
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block mb-4" style="width:50%" name="new-grade-form" value="new-grade">Note eintragen</button>
+            </form>
+        </div>
+    </main>
+{% endblock %}

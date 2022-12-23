@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+{% load main_extra %}
+
+{% block body %}
+    <main>
+        <div class="personal-info">
+            <h1>
+                <u>Noten von {{ student.first_name }} {{ student.last_name }}:</u> {% if student.id|get_average_all != None %}({{ student.id|get_average_all }}){% endif %}
+            </h1>
+            {% if grades_dict %}
+                {% for subject, grades in grades_dict.items %}
+                    <button class="{{ grades_dict.keys|get_class_button:subject }}" type="button" onclick="collapse_show_button(this)">
+                        <strong>{{ subject }}</strong> {% if grades_sum_dict|get_item:subject != None %}<div class="noten-avg items-align-right round-border">({{ grades_sum_dict|get_item:subject }})</div>{% endif %}
+                    </button>
+                    <div class="content">
+                        {% if grades %}
+                            <ul>
+                                {% for grade in grades %}
+                                    <div class="content-text">
+                                        <li>Note: <strong>{{ grade.Note }}</strong>{% if grade.Thema != None %} ({{ grade.Thema }}) {% endif %}</li><form method="POST" action="{% url 'mainApp:all_grades' student.id %}">{% csrf_token %}<button type="submit" name="delete" value="{{ grade.ID }}" class="items-align-right small-button">Note löschen</button></form>
+                                        Datum: {{ grade.Datum }}
+                                        <br>
+                                        Gewichtung: {{ grade.Gewichtung }}
+                                        {% if user.klasse|get_avg_class:grade.Thema != None%}
+                                        <br>
+                                        Klassenschnitt: {{ user.klasse|get_avg_class:grade.Thema }}
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <div class="content-text">
+                                <p>{{ student.first_name }} {{ student.last_name }} hat noch keine Noten in diesem Fach!</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                {% else %}
+                <p>Noch keine Fächer eingetragen!</p>
+            {% endif %}
+        </div>
+    </main>
+{% endblock %}

@@ -31,6 +31,12 @@
                 {% else %}
                     Alter: <strong>Kein Alter angegeben, bitte wenden Sie sich an ihren Administrator!</strong>
                 {% endif %}
+                {% if user.is_teacher %}
+                    {% if user|get_subjects_of_teacher != None %}
+                        <br>
+                        Deine Fächer: {{ user|get_subjects_of_teacher }}
+                    {% endif %}
+                {% endif %}
             </p>
             <h1>
                 <u>Neueste Noten:</u>

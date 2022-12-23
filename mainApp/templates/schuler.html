@@ -32,9 +32,17 @@
                     Alter: <strong>Kein Alter angegeben, bitte wenden Sie sich an ihren Administrator!</strong>
                 {% endif %}
             </p>
-            <h1>
-                <u>Neueste Noten:</u>
-            </h1>
+            <div style="width:50%">
+                {% if recent_grades %}
+                <form action="{% url 'mainApp:all_grades' student.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="small-button-align-right small-button">Alle Noten von {{ student.first_name }} {{ student.last_name }}</button>
+                </form>
+                {% endif %}
+                <h1>
+                    <u>Neueste Noten:</u>
+                </h1>
+            </div>
             {% if recent_grades %}
                 {% for grade in recent_grades %}
                     <button class="{{ recent_grades|get_class_button:grade }}" type="button" onclick="collapse_show_button(this)">

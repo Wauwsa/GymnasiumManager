@@ -6,7 +6,7 @@ import datetime
 
 # Create your models here.
 class SchoolClass(models.Model):
-    name = models.CharField(default='', max_length=5)
+    name = models.CharField(max_length=5)
 
     @staticmethod
     def get_students(class_name):
@@ -58,7 +58,7 @@ class SchoolClass(models.Model):
 
 
 class Person(AbstractUser):
-    klasse = models.ForeignKey(SchoolClass, on_delete=models.CASCADE, blank=True, null=True)
+    klasse = models.ForeignKey(SchoolClass, on_delete=models.CASCADE)
     birth = models.DateField(default=datetime.date.today)
     street = models.CharField(max_length=25, blank=True, null=True)
     street_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(99)], blank=True, null=True)
@@ -86,7 +86,7 @@ class Person(AbstractUser):
 
 
 class Subject(models.Model):
-    teacher = models.ForeignKey(Person, on_delete=models.CASCADE, blank=True, null=True)
+    teacher = models.ForeignKey(Person, on_delete=models.CASCADE)
     name = models.CharField(max_length=20)
 
     def __str__(self):
@@ -98,7 +98,7 @@ class Subject(models.Model):
 
 
 class Thema(models.Model):
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, blank=True, null=True)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     thema = models.CharField(max_length=50)
 
     class Meta:
@@ -106,14 +106,13 @@ class Thema(models.Model):
         verbose_name_plural = 'Themen'
 
     def __str__(self):
-        return f'{self.thema}'
+        return f'{self.subject}, {self.thema}'
 
 
 class Test(models.Model):
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, blank=True, null=True)
-    thema = models.ForeignKey(Thema, on_delete=models.CASCADE, blank=True, null=True)
-    school_class = models.ForeignKey(SchoolClass, on_delete=models.CASCADE, blank=True, null=True)  # need that to calculate average of class in one thema
-    weight = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(99)], blank=True, null=True, default=1)
+    thema = models.ForeignKey(Thema, on_delete=models.CASCADE)
+    school_class = models.ForeignKey(SchoolClass, on_delete=models.CASCADE)  # need that to calculate average of class in one thema
+    weight = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(99)], default=1)
     date = models.DateField(default=datetime.date.today)
 
     def save(self, *args, **kwargs):
@@ -123,23 +122,22 @@ class Test(models.Model):
         return super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'{self.subject}, {self.thema}'
+        return f'{self.thema.subject}, {self.thema.thema}, {self.school_class}'
 
 
 class Grade(models.Model):
-    student = models.ForeignKey(Person, on_delete=models.CASCADE, blank=True, null=True)
-    grade = models.FloatField(validators=[MinValueValidator(1), MaxValueValidator(6)], blank=True, null=True)
-    test = models.ForeignKey(Test, on_delete=models.CASCADE, blank=True, null=True)
+    student = models.ForeignKey(Person, on_delete=models.CASCADE)
+    grade = models.FloatField(validators=[MinValueValidator(1), MaxValueValidator(6)])
+    test = models.ForeignKey(Test, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.student}, {self.grade}'
+        return f'{self.student}, {self.test.thema.subject}, {self.test.thema.thema}, {self.grade}'
 
     @staticmethod
     def get_grades(student, subjects):
         grades_dict_complete = {}
         for subject in subjects:
-            grades_object_list = Grade.objects.filter(student=student, test__subject__name=subject)
-            print(grades_object_list)
+            grades_object_list = Grade.objects.filter(student=student, test__thema__subject__name=subject)
             grade_dict_list = []
             for grade in grades_object_list:
                 grade_dict = {}
@@ -147,6 +145,7 @@ class Grade(models.Model):
                 grade_dict['Datum'] = grade.test.date.strftime('%d/%m/%Y')
                 grade_dict['Thema'] = grade.test.thema
                 grade_dict['Gewichtung'] = grade.test.weight
+                grade_dict['ID'] = grade.id
                 grade_dict_list.append(grade_dict)
             grades_dict_complete[subject] = grade_dict_list
         return grades_dict_complete
@@ -154,16 +153,15 @@ class Grade(models.Model):
     @staticmethod
     def get_recent_grades(student_id):
         grades_list_complete = []
-        grades_object_list = Grade.objects.filter(student_id=student_id)
+        grades_object_list = Grade.objects.filter(student_id=student_id).order_by('test__date')
         for grade in grades_object_list:
             grade_dict = {}
             grade_dict['Note'] = grade.grade
-            grade_dict['Fach'] = grade.test.subject
+            grade_dict['Fach'] = grade.test.thema.subject
             grade_dict['Thema'] = grade.test.thema
             grade_dict['Datum'] = grade.test.date.strftime('%d/%m/%Y')
             grade_dict['Gewichtung'] = grade.test.weight
             grades_list_complete.append(grade_dict)
-        print(grades_list_complete)
         return grades_list_complete
 
     @staticmethod
@@ -183,8 +181,8 @@ class Grade(models.Model):
 
 
 class Absenzen(models.Model):
-    student = models.ForeignKey(Person, on_delete=models.CASCADE, blank=True, null=True)
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, blank=True, null=True)
+    student = models.ForeignKey(Person, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     date = models.DateField(default=datetime.date.today)
     excused = models.BooleanField(default=False)
 
@@ -192,6 +190,10 @@ class Absenzen(models.Model):
         local_excuse = 'Ja' if self.excused else 'Nein'  # if self.excused == True set it to 'Ja'
         local_expire_date = self.date + datetime.timedelta(days=10)
         return f'{self.student.first_name}, {self.subject.name}, Entschuldigt: {local_excuse}, Abgabedatum: {local_expire_date}'
+
+    class Meta:
+        verbose_name = 'Absenz'
+        verbose_name_plural = 'Absenzen'
 
     @staticmethod
     def get_absenzen(student):

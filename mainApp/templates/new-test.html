@@ -1,0 +1,54 @@
+{% extends 'layout.html' %}
+{% load main_extra %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+    <main>
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill"></i> {{ message }}
+                    <button type="button" class="close" aria-label="Close" data-bs-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% elif message.tags == 'success' %}
+                <div class="alert alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle-fill"></i> {{ message }}
+                    <button type="button" class="close" aria-label="Close" data-bs-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+        <div class="personal-info">
+            <div style="width:50%">
+                <form method="POST" action="/new-thema" style="transform: translateY(-20px)">
+                    {% csrf_token %}
+                    <button type="submit" name="new-thema" value="new-thema" class="small-button-align-right small-button" style="transform: translateY(30px)">Neues Thema eintragen</button>
+                </form>
+                <h1>
+                    <u>Neuen Test eintragen:</u>
+                </h1>
+            </div>
+            <form action="/new-test" method="POST" class="form-group">
+                {% csrf_token %}
+                <div class="form-outline mb-3" style="width:50%">
+                    {{ form.thema|as_crispy_field }}
+                </div>
+                <div class="form-outline mb-3" style="width:50%">
+                    {{ form.school_class|as_crispy_field }}
+                </div>
+                <div class="form-outline mb-3" style="width:50%">
+                    {{ form.weight|as_crispy_field }}
+                </div>
+                <div class="form-outline mb-3" style="width:50%">
+                    {{ form.date|as_crispy_field }}
+                </div>
+                <button type="submit" class="btn btn-primary btn-block mb-4" style="width:50%" name="new-test-form" value="new-test">Test erstellen</button>
+            </form>
+        </div>
+    </main>
+{% endblock %}

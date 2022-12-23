@@ -64,7 +64,6 @@ async function collapse_show_button(ele) {
 
 function change_color() { // change color depending on grade
     let ele = Array.from(document.getElementsByClassName("noten-avg")) // div needs class "noten-avg"
-    console.log(ele)
     for (let x in ele) {
         let current_element = ele[x]
         let i = current_element.innerText.toString().replace(/[()]/g, "") // replaces () in inner text
@@ -86,8 +85,10 @@ function change_color() { // change color depending on grade
 
 function button_radius() {
     let ele = Array.from(document.getElementsByClassName('collapsible')) // get all elements that are collapsible
-    const content = ele[ele.length-1].nextElementSibling // get the content for last button
-    content.classList.add('content-bottom-collapsible')
+    if (ele.length > 0) {
+        const content = ele[ele.length-1].nextElementSibling // get the content for last button
+        content.classList.add('content-bottom-collapsible')
+    }
 }
 
 function button_states() {

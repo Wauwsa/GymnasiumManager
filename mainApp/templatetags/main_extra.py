@@ -1,5 +1,5 @@
 from django import template
-from ..models import Person, Grade
+from ..models import Person, Grade, Subject
 register = template.Library()
 
 
@@ -60,3 +60,14 @@ def get_teacher_of_class(klasse):
                 return member.first_name + ' ' + member.last_name
             return None
         return None
+
+
+@register.filter
+def get_subjects_of_teacher(teacher):
+    subjects = Subject.objects.filter(teacher=teacher)
+    subject_list = []
+    for subject in subjects:
+        subject_list.append(subject.name)
+    if len(subject_list) == 0:
+        return None
+    return ', '.join(subject_list)
