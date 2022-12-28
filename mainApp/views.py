@@ -3,6 +3,7 @@ from django.contrib.auth import logout
 from .models import Subject, Absenzen, SchoolClass, Person, Grade
 from .forms import NewTestForm, NewGradeForm, NewThemaForm, NewAbsenzForm
 from django.contrib import messages
+from django.http import HttpResponseNotFound
 
 # Create your views here.
 # POST Logout muss nur in der View für Index getestet werden, da in HTML action="." --> Post wird zu root weitergeleitet

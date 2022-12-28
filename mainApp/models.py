@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group
 import datetime
 
 
@@ -61,10 +61,23 @@ class Person(AbstractUser):
     klasse = models.ForeignKey(SchoolClass, on_delete=models.CASCADE)
     birth = models.DateField(default=datetime.date.today)
     street = models.CharField(max_length=25, blank=True, null=True)
-    street_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(99)], blank=True, null=True)
+    street_number = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(999)], blank=True, null=True)
     city = models.CharField(max_length=20, blank=True, null=True)
     province = models.CharField(max_length=20, blank=True, null=True)
     code = models.IntegerField(validators=[MinValueValidator(0, MaxValueValidator(9999))], blank=True, null=True)
+
+    def __init__(self, *args, **kwargs):
+        super(Person, self).__init__(*args, **kwargs)
+        if self.username and self.is_student() and not self.email and not self.first_name and not self.last_name:
+            name = self.username.split('.')
+            self.first_name = name[0].capitalize()
+            self.last_name = name[len(name)-1].capitalize()
+            self.email = f'{self.username}@stud.edubs.ch'
+        elif self.username and self.is_teacher() and not self.email and not self.first_name and not self.last_name:
+            name = self.username.split('.')
+            self.first_name = name[0].capitalize()
+            self.last_name = name[len(name)-1].capitalize()
+            self.email = f'{self.username}@edubs.ch'
 
     def return_address(self):
         if self.street and self.street_number and self.city and self.province and self.code:
@@ -100,6 +113,7 @@ class Subject(models.Model):
 class Thema(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     thema = models.CharField(max_length=50)
+    created_at = models.DateTimeField(default=datetime.datetime.now())
 
     class Meta:
         verbose_name = 'Thema'
@@ -153,7 +167,7 @@ class Grade(models.Model):
     @staticmethod
     def get_recent_grades(student_id):
         grades_list_complete = []
-        grades_object_list = Grade.objects.filter(student_id=student_id).order_by('test__date')
+        grades_object_list = Grade.objects.filter(student_id=student_id).order_by('test__date')[:5]
         for grade in grades_object_list:
             grade_dict = {}
             grade_dict['Note'] = grade.grade
@@ -161,6 +175,7 @@ class Grade(models.Model):
             grade_dict['Thema'] = grade.test.thema
             grade_dict['Datum'] = grade.test.date.strftime('%d/%m/%Y')
             grade_dict['Gewichtung'] = grade.test.weight
+            grade_dict['ID'] = grade.id
             grades_list_complete.append(grade_dict)
         return grades_list_complete
 

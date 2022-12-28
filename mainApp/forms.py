@@ -6,8 +6,8 @@ from .models import Grade, Person, Test, Thema, Subject, Absenzen
 class NewGradeForm(ModelForm):
     def __init__(self, current_user, *args, **kwargs):
         super(NewGradeForm, self).__init__(*args, **kwargs)
-        self.fields['student'].queryset = Person.objects.filter(klasse=current_user.klasse.id).exclude(pk=current_user.id)
-        self.fields['test'].queryset = Test.objects.filter(thema__subject__teacher=current_user)
+        self.fields['student'].queryset = Person.objects.filter(klasse=current_user.klasse.id).exclude(pk=current_user.id).order_by('username')
+        self.fields['test'].queryset = Test.objects.filter(thema__subject__teacher=current_user).order_by('date')
 
     class Meta:
         model = Grade
@@ -25,7 +25,7 @@ class NewGradeForm(ModelForm):
 class NewTestForm(ModelForm):
     def __init__(self, current_user, *args, **kwargs):
         super(NewTestForm, self).__init__(*args, **kwargs)
-        self.fields['thema'].queryset = Thema.objects.filter(subject__teacher=current_user)
+        self.fields['thema'].queryset = Thema.objects.filter(subject__teacher=current_user).order_by('-created_at')
 
     class Meta:
         model = Test
@@ -55,7 +55,7 @@ class NewThemaForm(ModelForm):
 class NewAbsenzForm(ModelForm):
     def __init__(self, current_user, *args, **kwargs):
         super(NewAbsenzForm, self).__init__(*args, **kwargs)
-        self.fields['student'].queryset = Person.objects.filter(klasse=current_user.klasse.id).exclude(pk=current_user.id)
+        self.fields['student'].queryset = Person.objects.filter(klasse=current_user.klasse.id).exclude(pk=current_user.id).order_by('first_name')
         self.fields['subject'].queryset = Subject.objects.filter(teacher=current_user)
 
     class Meta:
