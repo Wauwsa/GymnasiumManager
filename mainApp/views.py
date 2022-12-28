@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import logout
 from .models import Subject, Absenzen, SchoolClass, Person, Grade
-from .forms import NewTestForm, NewGradeForm, NewThemaForm
+from .forms import NewTestForm, NewGradeForm, NewThemaForm, NewAbsenzForm
 from django.contrib import messages
 
 # Create your views here.
@@ -49,6 +49,8 @@ def panel(request):
                     return redirect('mainApp:new-grade')
                 elif request.POST.get('new-theme') == 'new-theme':
                     return redirect('mainApp:new-thema')
+                elif request.POST.get('new-absenz') == 'new-absenz':
+                    return redirect('mainApp:new-absenz')
             klasse = SchoolClass.get_class_of_teacher(request.user.id)
             return render(request, 'panel.html', {'klasse': klasse})
         else:
@@ -145,9 +147,7 @@ def all_grades(request, student_id):
     if request.user.is_authenticated:
         if request.user.is_teacher():
             if request.method == 'POST':
-                print('post')
                 if 'delete' in request.POST:
-                    print('delete')
                     Grade.objects.filter(pk=request.POST.get('delete')).delete()
             subject_list = Subject.get_subjects()
             grades = Grade.get_grades(student=student_id, subjects=subject_list)
@@ -157,3 +157,42 @@ def all_grades(request, student_id):
         else:
             return redirect('mainApp:home')
     return redirect('loginForm:login')
+
+
+def new_absenz(request):
+    if request.user.is_authenticated:
+        if request.user.is_teacher():
+            if request.method == 'POST':
+                if request.POST.get('new-absenz-form') == 'new-absenz':
+                    form = NewAbsenzForm(current_user=request.user, data=request.POST)
+                    if form.is_valid():
+                        form.save()
+                        messages.success(request, "Die Absenz wurde erfolgreich erstellt!")
+                        return redirect('mainApp:new-absenz')
+                    else:
+                        messages.error(request, "Der Vorgang ist fehlgeschlagen, bitte versuchen Sie es erneut!")
+            form = NewAbsenzForm(current_user=request.user)
+            return render(request, 'new_absenz.html', {'form': form})
+        else:
+            return redirect('mainApp:home')
+    else:
+        return redirect('loginForm:login')
+
+
+def all_absenzen(request, student_id):
+    if request.user.is_authenticated:
+        if request.user.is_teacher():
+            if request.method == 'POST':
+                if 'excuse' in request.POST:
+                    absenzen_objects = Absenzen.objects.filter(pk=request.POST.get('excuse'))
+                    for absenz in absenzen_objects:
+                        absenz.excused = True
+                        absenz.save()
+            absenzen_local = Absenzen.get_absenzen(student=student_id)
+            absenzen_sum_local = Absenzen.get_sum(absenzen_dict=absenzen_local)
+            student = get_object_or_404(Person, pk=student_id)
+            return render(request, 'all_absenzen.html', {'absenzen_dict': absenzen_local, 'absenzen_sum_dict': absenzen_sum_local, 'student': student})
+        else:
+            return redirect('mainApp:home')
+    else:
+        return redirect('loginForm:login')

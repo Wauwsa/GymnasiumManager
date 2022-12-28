@@ -215,6 +215,7 @@ class Absenzen(models.Model):
                     absenzen_dict['Abgelaufen'] = True
                 else:
                     absenzen_dict['Abgelaufen'] = False
+                absenzen_dict['ID'] = absenz.id
                 absenzen_list.append(absenzen_dict)
             absenzen_dict_complete[subject.name] = absenzen_list
         return absenzen_dict_complete

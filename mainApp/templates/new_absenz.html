@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+{% load main_extra %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+    <main>
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill"></i> {{ message }}
+                    <button type="button" class="close" aria-label="Close" data-bs-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% elif message.tags == 'success' %}
+                <div class="alert alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle-fill"></i> {{ message }}
+                    <button type="button" class="close" aria-label="Close" data-bs-dismiss="alert">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+        <div class="personal-info">
+            <h1>
+                <u>Neuen Test eintragen:</u>
+            </h1>
+            <form action="/new-absenz" method="POST" class="form-group">
+                {% csrf_token %}
+                <div class="form-outline mb-3" style="width:50%">
+                    {{ form.student|as_crispy_field }}
+                </div>
+                <div class="form-outline mb-3" style="width:50%">
+                    {{ form.subject|as_crispy_field }}
+                </div>
+                <div class="form-outline mb-3" style="width:50%">
+                    {{ form.date|as_crispy_field }}
+                </div>
+                <button type="submit" class="btn btn-primary btn-block mb-4" style="width:50%" name="new-absenz-form" value="new-absenz">Absenz eintragen</button>
+            </form>
+        </div>
+    </main>
+{% endblock %}

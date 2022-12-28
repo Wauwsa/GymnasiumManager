@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import Grade, Person, Test, Thema, Subject
+from .models import Grade, Person, Test, Thema, Subject, Absenzen
 
 
 # create a form
@@ -49,4 +49,20 @@ class NewThemaForm(ModelForm):
         labels = {
             'subject': 'Fach',
             'thema': 'Thema'
+        }
+
+
+class NewAbsenzForm(ModelForm):
+    def __init__(self, current_user, *args, **kwargs):
+        super(NewAbsenzForm, self).__init__(*args, **kwargs)
+        self.fields['student'].queryset = Person.objects.filter(klasse=current_user.klasse.id).exclude(pk=current_user.id)
+        self.fields['subject'].queryset = Subject.objects.filter(teacher=current_user)
+
+    class Meta:
+        model = Absenzen
+        fields = '__all__'
+        labels = {
+            'student': 'Schüler',
+            'subject': 'Fach',
+            'date': 'Datum',
         }
