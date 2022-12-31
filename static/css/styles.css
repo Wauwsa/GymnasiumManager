@@ -222,3 +222,10 @@ button:focus {
 .asteriskField {
     display: none;
 }
+
+.chartBox {
+	position:relative;
+    padding-top: 60px;
+	margin: auto;
+	height: 70vh;
+}

@@ -67,6 +67,41 @@
             {% endif %}
             {% endif %}
         </div>
+
+            <div class="chartBox">
+      <canvas id="myChart"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+      const ctx = document.getElementById('myChart');
+
+      new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: ['Deutsch', 'Englisch', 'Französisch', 'Mathematik', 'Physik', 'PAM', 'Geografie', 'Geschichte', 'Biologie', 'Chemie', 'BG'],
+          datasets: [{
+            label: '2022 Noten',
+            data: [6, 5, 3, 4.5, 2, 3, 3.75, 1, 4, 4.75, 5.5],
+            borderWidth: 1
+          },{
+          label: '2021 Noten',
+          data: [5, 5, 4, 3.5, 3, 3, 4.75, 4, 4.75, 5, 5],
+          borderWidth: 0.5
+          }]
+        },
+        options: {
+          maintainAspectRatio: false,
+          scales: {
+            r: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    </script>
+
     </main>
 
 {% endblock %}
