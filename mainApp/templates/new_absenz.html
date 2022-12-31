@@ -24,30 +24,21 @@
         {% endfor %}
     {% endif %}
         <div class="personal-info">
-            <div style="width:50%">
-                <form method="POST" action="/new-thema" style="transform: translateY(-20px)">
-                    {% csrf_token %}
-                    <button type="submit" name="new-thema" value="new-thema" class="small-button-align-right small-button" style="transform: translateY(30px)">Neues Thema eintragen</button>
-                </form>
-                <h1>
-                    <u>Neuen Test eintragen:</u>
-                </h1>
-            </div>
-            <form action="/new-test" method="POST" class="form-group">
+            <h1>
+                <u>Neuen Test eintragen:</u>
+            </h1>
+            <form action="/new-absenz" method="POST" class="form-group">
                 {% csrf_token %}
                 <div class="form-outline mb-3" style="width:50%">
-                    {{ form.thema|as_crispy_field }}
+                    {{ form.student|as_crispy_field }}
                 </div>
                 <div class="form-outline mb-3" style="width:50%">
-                    {{ form.school_class|as_crispy_field }}
-                </div>
-                <div class="form-outline mb-3" style="width:50%">
-                    {{ form.weight|as_crispy_field }}
+                    {{ form.subject|as_crispy_field }}
                 </div>
                 <div class="form-outline mb-3" style="width:50%">
                     {{ form.date|as_crispy_field }}
                 </div>
-                <button type="submit" class="btn btn-primary btn-block mb-4" style="width:50%" name="new-test-form" value="new-test">Test erstellen</button>
+                <button type="submit" class="btn btn-primary btn-block mb-4" style="width:50%" name="new-absenz-form" value="new-absenz">Absenz eintragen</button>
             </form>
         </div>
     </main>

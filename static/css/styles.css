@@ -190,16 +190,20 @@ button:focus {
 
 .button-align-right {
     float: right;
-    margin-right: 100px;
+    margin-right: 10px;
 }
 
 .second-button {
-    padding: 9px 25px;
-    background-color: #646464;
+    padding: 9px 10px;
+    background-color: #565656;
     border: none;
     border-radius: 50px;
     cursor: pointer;
     transition: all 0.3s ease 0s;
+}
+
+.second-button:hover {
+    background-color: #646464;
 }
 
 .small-button {

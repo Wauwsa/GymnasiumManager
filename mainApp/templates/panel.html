@@ -13,7 +13,7 @@
                         </button>
                     </div>
                 {% elif message.tags == 'success' %}
-                    <div class="alert alert alert-success alert-dismissible fade show" role="alert">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <i class="bi bi-check-circle-fill"></i> {{ message }}
                         <button type="button" class="close" aria-label="Close" data-bs-dismiss="alert">
                             <span aria-hidden="true">&times;</span>
@@ -29,7 +29,8 @@
             <form method="POST" action="/panel">
                 {% csrf_token %}
                 <button type="submit" name="new-grade" value="new-grade" class="button-align-right second-button">Neue Note eintragen</button>
-                <button type="submit" name="new-theme" value="new-theme" class="button-align-right second-button" style="transform: translateX(50px)">Neues Thema eintragen</button>
+                <button type="submit" name="new-theme" value="new-theme" class="button-align-right second-button">Neues Thema eintragen</button>
+                <button type="submit" name="new-absenz" value="new-absenz" class="button-align-right second-button">Neue Absenz eintragen</button>
             </form>
             <button class="collapsible bottom-collapsible top-collapsible" type="button" onclick="collapse_show_button(this)">
                 Klasse: {{ klasse.Klasse }}<div class="items-align-right round-border">{{ klasse.Students|get_number_students }} Schüler</div>

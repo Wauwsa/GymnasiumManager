@@ -13,4 +13,6 @@ urlpatterns = [
     path('new-test', views.new_test, name='new-test'),
     path('new-thema', views.new_thema, name='new-thema'),
     path('schuler/noten/<int:student_id>/', views.all_grades, name='all_grades'),
+    path('new-absenz', views.new_absenz, name='new-absenz'),
+    path('schuler/absenzen/<int:student_id>/', views.all_absenzen, name='all_absenzen'),
 ]

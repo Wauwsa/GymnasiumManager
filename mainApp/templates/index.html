@@ -38,6 +38,7 @@
                     {% endif %}
                 {% endif %}
             </p>
+            {% if not user.is_teacher %}
             <h1>
                 <u>Neueste Noten:</u>
             </h1>
@@ -63,6 +64,7 @@
                 {% endfor %}
             {% else %}
                 <p>Du hast noch keine Noten!</p>
+            {% endif %}
             {% endif %}
         </div>
     </main>

@@ -32,6 +32,11 @@
                     Alter: <strong>Kein Alter angegeben, bitte wenden Sie sich an ihren Administrator!</strong>
                 {% endif %}
             </p>
+            <form action="{% url 'mainApp:all_absenzen' student.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="small-button">Alle Absenzen von {{ student.first_name }} {{ student.last_name }}</button>
+            </form>
+            <br>
             <div style="width:50%">
                 {% if recent_grades %}
                 <form action="{% url 'mainApp:all_grades' student.id %}" method="POST">

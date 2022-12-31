@@ -110,3 +110,17 @@ function button_states() {
         }
     })
 }
+
+function auto_hide_alert() {
+    document.querySelectorAll('[role="alert"]').forEach(async function(el) {
+        await sleep (3000)
+        el.style.transition = 'all 0.2s';
+        el.style.opacity = '0';
+        el.style.padding = '0';
+        el.style.margin = '0';
+        el.style.height = '0px';
+        setTimeout(function() {
+            el.remove()
+        }, 200);
+    });
+}
