@@ -113,7 +113,7 @@ class Subject(models.Model):
 class Thema(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     thema = models.CharField(max_length=50)
-    created_at = models.DateTimeField(default=datetime.datetime.now())
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = 'Thema'
