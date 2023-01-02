@@ -12,7 +12,8 @@ urlpatterns = [
     path('new-grade', views.new_grade, name='new-grade'),
     path('new-test', views.new_test, name='new-test'),
     path('new-thema', views.new_thema, name='new-thema'),
-    path('schuler/noten/<int:student_id>/', views.all_grades, name='all_grades'),
+    path('schuler/<int:student_id>/noten/', views.all_grades, name='all_grades'),
     path('new-absenz', views.new_absenz, name='new-absenz'),
-    path('schuler/absenzen/<int:student_id>/', views.all_absenzen, name='all_absenzen'),
+    path('schuler/<int:student_id>/absenzen/', views.all_absenzen, name='all_absenzen'),
+    path('schuler/<int:student_id>/absenzen/<int:absenzen_id>/', views.absenzen_detail, name='absenzen_detail')
 ]

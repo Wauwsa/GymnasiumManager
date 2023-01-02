@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import logout
 from .models import Subject, Absenzen, SchoolClass, Person, Grade
-from .forms import NewTestForm, NewGradeForm, NewThemaForm, NewAbsenzForm
+from .forms import NewTestForm, NewGradeForm, NewThemaForm, NewAbsenzForm, UploadImageAbsenzForm
 from django.contrib import messages
-from django.http import HttpResponseNotFound
+import os
 
 # Create your views here.
 # POST Logout muss nur in der View für Index getestet werden, da in HTML action="." --> Post wird zu root weitergeleitet
@@ -17,7 +17,12 @@ def main_page(request):
                 return redirect('loginForm:login')
         else:
             recent_grades = Grade.get_recent_grades(student_id=request.user.id)
-            return render(request, 'index.html', {'recent_grades': recent_grades})
+            subject_list_query = list(Subject.get_subjects())
+            grades = Grade.get_grades(student=request.user.id, subjects=subject_list_query)
+            grades_sum_dict = Grade.get_avg_subject(grades=grades)
+            grades_avg = list(grades_sum_dict.values())
+            subject_list = list(grades_sum_dict.keys())  # so only subject with grades are passed
+            return render(request, 'index.html', {'recent_grades': recent_grades, 'subjects': subject_list, 'grades_avg': grades_avg})
 
     else:  # else redirect to login page
         return redirect('loginForm:login')
@@ -35,6 +40,9 @@ def noten(request):
 
 def absenzen(request):
     if request.user.is_authenticated:  # if user is logged in
+        if request.method == 'POST':
+            if 'detail' in request.POST:
+                return redirect(f'/schuler/{request.user.id}/absenzen/{request.POST.get("detail")}')
         absenzen_local = Absenzen.get_absenzen(student=request.user.id)
         absenzen_sum_local = Absenzen.get_sum(absenzen_dict=absenzen_local)
         return render(request, 'absenzen.html', {'absenzen_dict': absenzen_local, 'absenzen_sum_dict': absenzen_sum_local})
@@ -184,11 +192,8 @@ def all_absenzen(request, student_id):
     if request.user.is_authenticated:
         if request.user.is_teacher():
             if request.method == 'POST':
-                if 'excuse' in request.POST:
-                    absenzen_objects = Absenzen.objects.filter(pk=request.POST.get('excuse'))
-                    for absenz in absenzen_objects:
-                        absenz.excused = True
-                        absenz.save()
+                if 'detail' in request.POST:
+                    return redirect(f'/schuler/{student_id}/absenzen/{request.POST.get("detail")}')
             absenzen_local = Absenzen.get_absenzen(student=student_id)
             absenzen_sum_local = Absenzen.get_sum(absenzen_dict=absenzen_local)
             student = get_object_or_404(Person, pk=student_id)
@@ -197,3 +202,46 @@ def all_absenzen(request, student_id):
             return redirect('mainApp:home')
     else:
         return redirect('loginForm:login')
+
+
+def absenzen_detail(request, student_id, absenzen_id):
+    if request.user.is_authenticated:
+        if request.user.id == student_id or request.user.is_teacher():
+            absenz = Absenzen.objects.get(pk=absenzen_id)
+            form = UploadImageAbsenzForm(instance=absenz)
+            student = get_object_or_404(Person, pk=student_id)
+            absenzen_local = Absenzen.get_absenzen(student=student_id, absenz_id=absenzen_id)
+            if request.method == 'POST':
+                if 'excuse' in request.POST:
+                    absenzen_objects = Absenzen.objects.filter(pk=request.POST.get('excuse'))
+                    for absenz in absenzen_objects:
+                        absenz.excused = True
+                        absenz.save()
+                        return redirect(f'/schuler/{student_id}/absenzen/{absenzen_id}')
+                elif 'not-excused' in request.POST:
+                    absenzen_objects = Absenzen.objects.filter(pk=request.POST.get('not-excused'))
+                    for absenz in absenzen_objects:
+                        absenz.excused = False
+                        absenz.save()
+                        return redirect(f'/schuler/{student_id}/absenzen/{absenzen_id}')
+                elif request.POST.get('new-absenz-image') == 'new-absenz-image':
+                    form = UploadImageAbsenzForm(request.POST, request.FILES, instance=absenz)
+                    if form.is_valid() and len(request.FILES) > 0:
+                        messages.success(request, "Das Bild wurde erfolgreich hochgeladen!")
+                        absenz.image = request.FILES['image']
+                        absenz.save()
+                        return redirect(f'/schuler/{student_id}/absenzen/{absenzen_id}')
+                    else:
+                        messages.error(request, "Es gab einen Fehler beim Hochladen vom Bild!")
+                elif request.POST.get('delete-image') == 'delete-image':
+                    form = UploadImageAbsenzForm(request.POST, request.FILES, instance=absenz)
+                    if form.is_valid():
+                        messages.warning(request, "Das Bild wurde erfolgreich gelöscht!")
+                        absenz.image.delete(save=False)
+                        absenz.save()
+                        return redirect(f'/schuler/{student_id}/absenzen/{absenzen_id}')
+                    else:
+                        messages.error(request, "Es gab einen Fehler beim Löschen vom Bild!")
+            return render(request, 'absenzen_detail.html', {'absenz': absenzen_local, 'student': student, 'form': form})
+        return redirect('mainApp:home')
+    return redirect('loginForm:login')

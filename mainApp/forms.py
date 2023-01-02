@@ -1,3 +1,4 @@
+from django import forms
 from django.forms import ModelForm
 from .models import Grade, Person, Test, Thema, Subject, Absenzen
 
@@ -65,4 +66,17 @@ class NewAbsenzForm(ModelForm):
             'student': 'Schüler',
             'subject': 'Fach',
             'date': 'Datum',
+            'notes': 'Notizen',
+        }
+
+
+class UploadImageAbsenzForm(ModelForm):
+    class Meta:
+        model = Absenzen
+        fields = ['image']
+        labels = {
+            'image': 'Bild von Entschuldigung'
+        }
+        widgets = {
+            'image': forms.FileInput(attrs={'type': 'file'})
         }

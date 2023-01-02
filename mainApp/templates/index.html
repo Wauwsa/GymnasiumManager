@@ -8,9 +8,14 @@
                 <u>Persönliche Informationen:</u>
             </h1>
             <p>
+                {% if not user.is_teacher and subjects|length > 2 and recent_grades %}
+                    <div class="chartBox items-align-right">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                {% endif %}
                 {% if user.first_name|length > 0 and user.last_name|length > 0 %}
                     Name: {{ user.first_name }} {{ user.last_name }}
-                    {% else %}
+                {% else %}
                     Name: <strong>Kein Name angegeben, bitte wenden Sie sich an ihren Administrator!</strong>
                 {% endif %}
                 <br>
@@ -20,7 +25,7 @@
                 {% endif %}
                 {% if user.email|length > 0 %}
                     E-Mail: {{ user.email }}
-                    {% else %}
+                {% else %}
                     E-Mail: <strong>Keine E-Mail angegeben, bitte wenden Sie sich an ihren Administrator!</strong>
                 {% endif %}
                 <br>
@@ -39,69 +44,102 @@
                 {% endif %}
             </p>
             {% if not user.is_teacher %}
-            <h1>
-                <u>Neueste Noten:</u>
-            </h1>
-            {% if recent_grades %}
-                {% for grade in recent_grades %}
-                    <button class="{{ recent_grades|get_class_button:grade }}" type="button" onclick="collapse_show_button(this)">
-                        <strong>{{ grade.Note }}</strong> ({{ grade.Fach }})
-                    </button>
-                    <div class="content">
-                        <div class="content-text">
-                            <p>
-                                {% if grade.Thema != None %}Thema: {{ grade.Thema }}<br>{% endif %}
-                                Datum: {{ grade.Datum }}
-                                <br>
-                                Gewichtung: {{ grade.Gewichtung }}
-                                {% if student.klasse|get_avg_class:grade.Thema %}
+                <h1>
+                    <u>Neueste Noten:</u>
+                </h1>
+                {% if recent_grades %}
+                    {% for grade in recent_grades %}
+                        <button class="{{ recent_grades|get_class_button:grade }}" type="button"
+                                onclick="collapse_show_button(this)">
+                            <strong>{{ grade.Note }}</strong> ({{ grade.Fach }})
+                        </button>
+                        <div class="content">
+                            <div class="content-text">
+                                <p>
+                                    {% if grade.Thema != None %}Thema: {{ grade.Thema }}<br>{% endif %}
+                                    Datum: {{ grade.Datum }}
                                     <br>
-                                    Klassenschnitt: {{ student.klasse|get_avg_class:grade.Thema }}
-                                {% endif %}
-                            </p>
+                                    Gewichtung: {{ grade.Gewichtung }}
+                                    {% if student.klasse|get_avg_class:grade.Thema %}
+                                        <br>
+                                        Klassenschnitt: {{ student.klasse|get_avg_class:grade.Thema }}
+                                    {% endif %}
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p>Du hast noch keine Noten!</p>
-            {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <p>Du hast noch keine Noten!</p>
+                {% endif %}
             {% endif %}
         </div>
+        {% if subjects|length > 2 %}
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+                const ctx = document.getElementById('myChart');
 
-            <div class="chartBox">
-      <canvas id="myChart"></canvas>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <script>
-      const ctx = document.getElementById('myChart');
-
-      new Chart(ctx, {
-        type: 'radar',
-        data: {
-          labels: ['Deutsch', 'Englisch', 'Französisch', 'Mathematik', 'Physik', 'PAM', 'Geografie', 'Geschichte', 'Biologie', 'Chemie', 'BG'],
-          datasets: [{
-            label: '2022 Noten',
-            data: [6, 5, 3, 4.5, 2, 3, 3.75, 1, 4, 4.75, 5.5],
-            borderWidth: 1
-          },{
-          label: '2021 Noten',
-          data: [5, 5, 4, 3.5, 3, 3, 4.75, 4, 4.75, 5, 5],
-          borderWidth: 0.5
-          }]
-        },
-        options: {
-          maintainAspectRatio: false,
-          scales: {
-            r: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
-    </script>
-
+                new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: {{ subjects|safe }},
+                        datasets: [{
+                            label: '2022 Noten',
+                            data: {{ grades_avg }},
+                            borderWidth: 1
+                        },
+                       {% if grades_avg_old %}
+                            {
+                            label: '2021 Noten',
+                            data: [],
+                            borderWidth: 0.5
+                        }
+                        {% endif %}
+                        ]
+                    },
+                    options: {
+                        scale: {
+                            min: 1,
+                            max: 6,
+                            ticks: {
+                                stepSize: 0.5,
+                            }
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                ticks: {
+                                    font: {
+                                        size: 16
+                                    }
+                                },
+                                grid: {
+                                    color: 'gray'
+                                },
+                                angleLines: {
+                                    color: 'gray'
+                                },
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    font: {
+                                        size: 20
+                                    }
+                                }
+                            }
+                        {% if grades_avg_old %}
+                            title: {
+                                display: true,
+                                text: 'Noten im Vergleich'
+                            }
+                        {% endif %}
+                        }
+                    }
+                });
+            </script>
+        {% endif %}
     </main>
 
 {% endblock %}

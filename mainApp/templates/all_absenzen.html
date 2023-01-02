@@ -18,7 +18,7 @@
                             <ul>
                                 {% for absenzen_dict in absenzen %}
                                     <div class="content-text">
-                                        {% if absenzen_dict.Entschuldigt == 'Nein' %}<form method="POST" action="{% url 'mainApp:all_absenzen' student.id %}">{% csrf_token %}<button type="submit" name="excuse" value="{{ absenzen_dict.ID }}" class="items-align-right small-button" style="top: 50%">Absenz entschuldigen</button></form>{% endif %}
+                                        <form method="POST" action="{% url 'mainApp:all_absenzen' student.id %}">{% csrf_token %}<button type="submit" name="detail" value="{{ absenzen_dict.ID }}" class="items-align-right small-button" style="top: 50%">Absenz anschauen</button></form>
                                         <li>Entschuldigt: {{ absenzen_dict.Entschuldigt }}</li>
                                         {% if absenzen_dict.Entschuldigt == 'Nein' %}
                                             {% if absenzen_dict.Abgelaufen %}

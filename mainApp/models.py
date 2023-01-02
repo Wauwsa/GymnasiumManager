@@ -199,6 +199,8 @@ class Absenzen(models.Model):
     student = models.ForeignKey(Person, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     date = models.DateField(default=datetime.date.today)
+    notes = models.TextField(max_length=500, blank=True, null=True)
+    image = models.ImageField(upload_to='absenzen/%Y/%m/%d/', blank=True, null=True)
     excused = models.BooleanField(default=False)
 
     def __str__(self):
@@ -211,9 +213,33 @@ class Absenzen(models.Model):
         verbose_name_plural = 'Absenzen'
 
     @staticmethod
-    def get_absenzen(student):
+    def get_absenzen(student, **kwargs):
         absenzen_dict_complete = {}
         object_list = Subject.objects.order_by('name')
+        if kwargs:
+            absenzen_object_list = Absenzen.objects.filter(student=student, pk=list(kwargs.values())[0]).order_by('excused', '-date')
+            for absenz in absenzen_object_list:
+                absenzen_dict = {}
+                expire_date = absenz.date + datetime.timedelta(days=10)
+                if absenz.excused:
+                    absenzen_dict['Entschuldigt'] = 'Ja'
+                elif not absenz.excused:
+                    absenzen_dict['Entschuldigt'] = 'Nein'
+                absenzen_dict['Abgabedatum'] = expire_date.strftime('%d/%m/%Y')
+                current_date = datetime.date.today()
+                if expire_date < current_date:
+                    absenzen_dict['Abgelaufen'] = True
+                else:
+                    absenzen_dict['Abgelaufen'] = False
+                absenzen_dict['ID'] = absenz.id
+                if absenz.notes:
+                    absenzen_dict['Notizen'] = absenz.notes
+                if absenz.image:
+                    absenzen_dict['Bild'] = absenz.image
+                else:
+                    absenzen_dict['Bild'] = False
+                absenzen_dict['Fach'] = absenz.subject.name
+                return absenzen_dict
         for subject in object_list:
             absenzen_list = []
             absenzen_object_list = Absenzen.objects.filter(student=student, subject__name=subject.name).order_by('excused', '-date')
@@ -231,6 +257,12 @@ class Absenzen(models.Model):
                 else:
                     absenzen_dict['Abgelaufen'] = False
                 absenzen_dict['ID'] = absenz.id
+                if absenz.notes:
+                    absenzen_dict['Notizen'] = absenz.notes
+                if absenz.image:
+                    absenzen_dict['Bild'] = absenz.image
+                else:
+                    absenzen_dict['Bild'] = False
                 absenzen_list.append(absenzen_dict)
             absenzen_dict_complete[subject.name] = absenzen_list
         return absenzen_dict_complete
