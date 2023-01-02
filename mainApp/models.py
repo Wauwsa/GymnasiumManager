@@ -200,7 +200,7 @@ class Absenzen(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
     date = models.DateField(default=datetime.date.today)
     notes = models.TextField(max_length=500, blank=True, null=True)
-    image = models.ImageField(upload_to='absenzen/%Y/%m/%d/', blank=True, null=True)
+    image = models.ImageField(upload_to='absenzen/', blank=True, null=True)
     excused = models.BooleanField(default=False)
 
     def __str__(self):
