@@ -230,8 +230,6 @@ button:focus {
     margin: auto 40px auto auto;
     height: 70vh;
     width: 40%;
-    background: white;
-    box-shadow: 0 0 10px 20px white;
 }
 
 .image {
