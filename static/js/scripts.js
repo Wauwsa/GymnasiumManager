@@ -124,3 +124,13 @@ function auto_hide_alert() {
         }, 200);
     });
 }
+
+function delete_image_button() {
+    const button = document.getElementById('delete-image')
+    button.style.opacity = '100%'
+}
+
+function normal_state() {
+    const button = document.getElementById('delete-image')
+    button.style.opacity = '0%'
+}

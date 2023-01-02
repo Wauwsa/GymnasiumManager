@@ -42,6 +42,7 @@ main {
 body {
     height: calc(100vh - 84px); /* 100vh minus height navbar (84px) */
     width: 100vw;
+    margin: 0;
 }
 
 /* Login Form */
@@ -208,7 +209,7 @@ button:focus {
 
 .small-button {
     padding: 9px 25px;
-    background-color: #646464;
+    background-color: #565656;
     border: none;
     border-radius: 50px;
     cursor: pointer;
@@ -225,7 +226,48 @@ button:focus {
 
 .chartBox {
 	position:relative;
-    padding-top: 60px;
-	margin: auto;
-	height: 70vh;
+    padding: 10px;
+    margin: auto 40px auto auto;
+    height: 70vh;
+    width: 40%;
+    background: white;
+    box-shadow: 0 0 10px 20px white;
+}
+
+.image {
+    min-width: 50vw;
+    max-width: 50vw;
+    max-height: 50vw;
+    margin-bottom: 40px;
+}
+
+ /* Container needed to position the button. Adjust the width as needed */
+.show-image {
+    position: relative;
+    width: 50%;
+    transition: opacity ease-in-out 0.5s;
+}
+
+/* Make the image responsive */
+.show-image img {
+  width: 100%;
+  height: auto;
+}
+
+/* Style the button and place it in the middle of the container/image */
+.show-image .delete-image {
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
+
+.show-image .delete-image:hover {
+  background-color: #646464
+}
+
+.show-image:hover {
+    opacity: 80%;
 }
