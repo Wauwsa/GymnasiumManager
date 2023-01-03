@@ -26,7 +26,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 SECRET_KEY = 'django-insecure-wz34)5k8i_xzpue=*v*@(x_*0vjs@!4k-nsiy+&lk6j4!%pjf0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['gym-manager.lol']
 
