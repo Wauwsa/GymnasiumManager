@@ -95,7 +95,7 @@ function button_states() {
     let elements = Array.from(document.getElementsByClassName('collapsible')) // get all buttons
     elements.forEach(function (element, index) { // foreach loop with element and index of list
         let states_string = localStorage.getItem(window.location.pathname.toString()) // get the states of button in current url
-        if ((states_string) || (states_string.length <= 0)) { // check if there are any saved states
+        if (states_string !== null && states_string.length > 0) { // check if there are any saved states
             let states = states_string.split(',') // if so, turn it into list, seperated by the "," in the string
             if (states.includes(index.toString())) { // if the index of current button is in the list of activated buttons
                 const content = element.nextElementSibling;
