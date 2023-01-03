@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-wz34)5k8i_xzpue=*v*@(x_*0vjs@!4k-nsiy+&lk6j4!%pjf0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['gym-manager.lol']
 
 
 # Application definition
