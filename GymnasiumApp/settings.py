@@ -30,6 +30,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['gym-manager.lol']
 
+CSRF_TRUSTED_ORIGINS = ['https://*.gym-manager.lol']
 
 # Application definition
 
