@@ -41,7 +41,7 @@ main {
 
 body {
     height: calc(100vh - 84px); /* 100vh minus height navbar (84px) */
-    width: 100vw;
+    width: 100%;
     margin: 0;
 }
 
