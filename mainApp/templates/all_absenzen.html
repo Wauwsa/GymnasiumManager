@@ -6,7 +6,7 @@
     <main>
         <div class="personal-info">
             <h1>
-                <u>Absenzen:</u>
+                <u>Absenzen von {{ student.first_name }} {{ student.last_name }}:</u>
             </h1>
             {% if absenzen_dict %}
                 {% for subject, absenzen in absenzen_dict.items  %}
@@ -34,7 +34,7 @@
                             </ul>
                         {% else %}
                             <div class="content-text">
-                                <p>Du hast noch keine Absenzen in diesem Fach.</p>
+                                <p>{{ student.first_name }} {{ student.last_name }} hat noch keine Absenzen in diesem Fach.</p>
                             </div>
                         {% endif %}
                     </div>
