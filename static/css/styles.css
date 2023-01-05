@@ -235,7 +235,7 @@ button:focus {
 .image {
     min-width: 50vw;
     max-width: 50vw;
-    max-height: 50vw;
+    max-height: 200vw;
     margin-bottom: 40px;
 }
 
