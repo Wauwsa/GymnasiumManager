@@ -1,1 +1,4 @@
 .idea/
+media/
+**/__pycache__/*
+static/admin
