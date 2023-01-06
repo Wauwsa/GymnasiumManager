@@ -212,36 +212,40 @@ def absenzen_detail(request, student_id, absenzen_id):
             student = get_object_or_404(Person, pk=student_id)
             absenzen_local = Absenzen.get_absenzen(student=student_id, absenz_id=absenzen_id)
             if request.method == 'POST':
-                if 'excuse' in request.POST:
-                    absenzen_objects = Absenzen.objects.filter(pk=request.POST.get('excuse'))
-                    for absenz in absenzen_objects:
-                        absenz.excused = True
-                        absenz.save()
-                        return redirect(f'/schuler/{student_id}/absenzen/{absenzen_id}')
-                elif 'not-excused' in request.POST:
-                    absenzen_objects = Absenzen.objects.filter(pk=request.POST.get('not-excused'))
-                    for absenz in absenzen_objects:
-                        absenz.excused = False
-                        absenz.save()
-                        return redirect(f'/schuler/{student_id}/absenzen/{absenzen_id}')
-                elif request.POST.get('new-absenz-image') == 'new-absenz-image':
-                    form = UploadImageAbsenzForm(request.POST, request.FILES, instance=absenz)
-                    if form.is_valid() and len(request.FILES) > 0:
-                        messages.success(request, "Das Bild wurde erfolgreich hochgeladen!")
-                        absenz.image = request.FILES['image']
-                        absenz.save()
-                        return redirect(f'/schuler/{student_id}/absenzen/{absenzen_id}')
+                if request.user.is_teacher():
+                    if 'excuse' in request.POST:
+                        absenzen_objects = Absenzen.objects.filter(pk=request.POST.get('excuse'))
+                        for absenz in absenzen_objects:
+                            absenz.excused = True
+                            absenz.save()
+                            return redirect(f'/schuler/{student_id}/absenzen/{absenzen_id}')
+                    elif 'not-excused' in request.POST:
+                        absenzen_objects = Absenzen.objects.filter(pk=request.POST.get('not-excused'))
+                        for absenz in absenzen_objects:
+                            absenz.excused = False
+                            absenz.save()
+                            return redirect(f'/schuler/{student_id}/absenzen/{absenzen_id}')
+                elif request.user.is_student():
+                    elif request.POST.get('new-absenz-image') == 'new-absenz-image':
+                        form = UploadImageAbsenzForm(request.POST, request.FILES, instance=absenz)
+                        if form.is_valid() and len(request.FILES) > 0:
+                            messages.success(request, "Das Bild wurde erfolgreich hochgeladen!")
+                            absenz.image = request.FILES['image']
+                            absenz.save()
+                            return redirect(f'/schuler/{student_id}/absenzen/{absenzen_id}')
+                        else:
+                            messages.error(request, "Es gab einen Fehler beim Hochladen vom Bild!")
+                    elif request.POST.get('delete-image') == 'delete-image':
+                        form = UploadImageAbsenzForm(request.POST, request.FILES, instance=absenz)
+                        if form.is_valid():
+                            messages.warning(request, "Das Bild wurde erfolgreich gelöscht!")
+                            absenz.image.delete(save=False)
+                            absenz.save()
+                            return redirect(f'/schuler/{student_id}/absenzen/{absenzen_id}')
+                        else:
+                            messages.error(request, "Es gab einen Fehler beim Löschen vom Bild!")
                     else:
-                        messages.error(request, "Es gab einen Fehler beim Hochladen vom Bild!")
-                elif request.POST.get('delete-image') == 'delete-image':
-                    form = UploadImageAbsenzForm(request.POST, request.FILES, instance=absenz)
-                    if form.is_valid():
-                        messages.warning(request, "Das Bild wurde erfolgreich gelöscht!")
-                        absenz.image.delete(save=False)
-                        absenz.save()
-                        return redirect(f'/schuler/{student_id}/absenzen/{absenzen_id}')
-                    else:
-                        messages.error(request, "Es gab einen Fehler beim Löschen vom Bild!")
+                        messages.error(request, "Sie haben nicht die Erlaubnis etwas zu ändern")
             return render(request, 'absenzen_detail.html', {'absenz': absenzen_local, 'student': student, 'form': form})
         return redirect('mainApp:home')
     return redirect('loginForm:login')
