@@ -226,7 +226,7 @@ def absenzen_detail(request, student_id, absenzen_id):
                             absenz.save()
                             return redirect(f'/schuler/{student_id}/absenzen/{absenzen_id}')
                 elif request.user.is_student():
-                    elif request.POST.get('new-absenz-image') == 'new-absenz-image':
+                    if request.POST.get('new-absenz-image') == 'new-absenz-image':
                         form = UploadImageAbsenzForm(request.POST, request.FILES, instance=absenz)
                         if form.is_valid() and len(request.FILES) > 0:
                             messages.success(request, "Das Bild wurde erfolgreich hochgeladen!")
