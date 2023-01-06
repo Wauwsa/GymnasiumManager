@@ -244,8 +244,8 @@ def absenzen_detail(request, student_id, absenzen_id):
                             return redirect(f'/schuler/{student_id}/absenzen/{absenzen_id}')
                         else:
                             messages.error(request, "Es gab einen Fehler beim Löschen vom Bild!")
-                    else:
-                        messages.error(request, "Sie haben nicht die Erlaubnis etwas zu ändern")
+                else:
+                    messages.error(request, "Sie haben nicht die Erlaubnis etwas zu ändern")
             return render(request, 'absenzen_detail.html', {'absenz': absenzen_local, 'student': student, 'form': form})
         return redirect('mainApp:home')
     return redirect('loginForm:login')
